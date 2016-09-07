@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  ">
+
+    <context:component-scan base-package="id.or.greenlabs.app.api.controller"/>
+    <import resource="core-context.xml"/>
+
+    <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="com.greenlabs.gmap.ws.exception.ControllerException">error/404</prop>
+                <prop key="java.lang.Exception">error/error</prop>
+                <prop key="java.lang.RuntimeException">error/error</prop>
+            </props>
+        </property>
+        <property name="statusCodes">
+            <props>
+                <prop key="error/404">404</prop>
+                <prop key="error/error">500</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- <bean id="agamaJsonView" factory-bean="agamaFactoryBean" factory-method="createAgamaView">
+     </bean>
+
+     <bean id="agamaDetailJsonView" factory-bean="agamaFactoryBean" factory-method="createAgamaDetailView">
+     </bean>
+
+     <bean id="locationJsonView" factory-bean="locationFactoryBean" factory-method="createLocationView">
+     </bean>
+
+     <bean id="tripJsonView" factory-bean="tripFactoryBean" factory-method="createTripView">
+     </bean>
+
+     <bean id="followTripJsonView" factory-bean="timelineFactoryBean" factory-method="createFollowView">
+     </bean>
+
+     <bean id="venueJsonView" factory-bean="venueFactoryBean" factory-method="createVenueView">
+     </bean>-->
+
+</beans>

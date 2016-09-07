@@ -1,0 +1,48 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <context:component-scan base-package="id.or.greenlabs.app.api.controller"/>
+
+    <mvc:annotation-driven>
+        <mvc:async-support default-timeout="30000" task-executor="taskExecutor"/>
+        <mvc:message-converters>
+            <ref bean="gsonHttpMessageConverter"/>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!-- modify the parameters of thread pool -->
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="5"/>
+        <property name="maxPoolSize" value="50"/>
+        <property name="queueCapacity" value="10"/>
+        <property name="keepAliveSeconds" value="120"/>
+    </bean>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
+
+    <bean id="gsonBuilder" class="com.google.gson.GsonBuilder">
+     <!--   <property name="dateFormat" value="yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'"/>-->
+    </bean>
+
+    <!--  <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+          <property name="targetObject" ref="gsonBuilder"/>
+          <property name="targetMethod" value="excludeFieldsWithoutExposeAnnotation"/>
+      </bean>-->
+
+    <bean id="gsonHttpMessageConverter" class="org.springframework.http.converter.json.GsonHttpMessageConverter">
+        <property name="gson">
+            <bean class="com.google.gson.Gson" factory-bean="gsonBuilder" factory-method="create"/>
+        </property>
+    </bean>
+
+</beans>
+
+
+
