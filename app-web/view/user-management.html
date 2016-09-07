@@ -1,0 +1,362 @@
+<!-- Bread crumb is created dynamically -->
+<div class="row">
+    <div class="col-xs-12">
+        <h1 class="page-title txt-color-blueDark">
+            Setting
+            <i class="fa fa-angle-right fa-fw "></i>
+            <span><a href="#view/user-management.html">User Management</a></span>
+        </h1>
+    </div>
+    <!-- end col -->
+</div>
+<!-- end row -->
+<!-- widget grid -->
+<section id="widget-grid" class="">
+    <div class="row">
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="padding">
+                <div class="widget-body news-item">
+                    <form class="form-horizontal" id="form_user_management">
+                        <legend>Input User Management</legend>
+                        <div class="content controls form-group">
+                            <div class="row" style="display: none">
+                                <div class="col-md-2">
+                                    <label>ID User</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="number" name="id" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Nama<span>*</span></label>
+                                <div class="col-sm-5 name">
+                                    <input type="text" name="name" placeholder="Nama" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Email<span>*</span></label>
+                                <div class="col-sm-5 email">
+                                    <input type="email" name="email" placeholder="Email" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Username<span>*</span></label>
+                                <div class="col-sm-5 username">
+                                    <input type="text" name="username" placeholder="Username" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Password<span>*</span></label>
+                                <div class="col-sm-5 password">
+                                    <input type="password" name="password" placeholder="Password" class="form-control"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Role</label>
+                                <div class="col-sm-5 password">
+                                    <select class="form-control validate[required]" name="role" id="role"
+                                            onchange="onComboBoxRoleChanges()" placeholder="role">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group hidden-xs">
+                                <div class="col-sm-offset-2 col-sm-5">
+                                    <button type="button" class="btn btn-primary btn-save-user" style="float: right">
+                                        <i></i> Simpan
+                                    </button>
+                                    <button type="reset" value="Reset" class="btn btn-warning btn-clear-user">Reset</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="dialog-confirm" title="Confirm" hidden>
+                <div><p><span class="ui-icon-alert" style="float:left; overflow: hidden; height: 25px">
+                </span>Anda yakin akan menghapus data ini?</p></div>
+            </div>
+            <div class="padding">
+                <table id="dt_user_management" class="table table-striped table-bordered table-hover" width="100%">
+                    <thead>
+                    <tr>
+                        <td align="center" hidden>ID</td>
+                        <td align="center">Nama</td>
+                        <td align="center">Email</td>
+                        <td align="center">Username</td>
+                        <td align="center" hidden>Password</td>
+                        <td align="center">Role</td>
+                        <td align="center" rowspan='1' colspan='2'>Actions</td>
+                    </tr>
+                    </thead>
+                </table>
+                <!-- end #dt_user_management -->
+            </div>
+            <!--end border-c-->
+        </article>
+        <!-- WIDGET END -->
+    </div>
+    <!-- end row -->
+</section>
+<!-- end widget grid -->
+
+<script type="text/javascript">
+    pageSetUp();
+
+    var grid = jQuery("#grid");
+
+    var pagefunction = function () {
+        initRole();
+        loadDataGrid();
+        validatForm();
+        styleFocusInput();
+    };
+
+    function initRole() {
+        $select = $('#role');
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            url: BASE_URL + "roles",
+            dataType: "JSON",
+            type: "GET",
+            success: function (result) {
+                if (typeof(result) === "undefined" || result === null) {
+                    $select.html('<option value="">none available</option>');
+                    $(".role").removeClass('ajax_loader');
+                    return;
+                }
+
+                $select.html('');
+                $.each(result.data, function (key, val) {
+                    $select.append('<option value="' + val.id + '">' + val.roleLevel + '</option>');
+                });
+
+                $(".role").removeClass('ajax_loader');
+                idRole = result.data[0].id; //dapatkan role yang pertama
+            },
+            error: function () {
+                console.log('role');
+                $select.html('<option value="">none available</option>');
+            }
+        });
+    }
+
+    function onComboBoxRoleChanges() {
+        idRole = $("#role option:selected").val();
+    }
+
+    function loadDataGrid() {
+        $("#dt_user_management").find("tbody").remove();
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            type: "GET",
+            contentType: "application/json",
+            url: BASE_URL + "setting/users",
+            success: function (json) {
+                if (json != null) {
+                    $("#dt_user_management").append("<tbody class='tbody_users'>");
+                    $.each(json, function (index, value) {
+                        var tr = "<tr>" +
+                                "<td class='idUser' style='display: none' >" + value.id + "</td>" +
+                                "<td class='name'>" + value.name + "</td>" +
+                                "<td class='email'>" + value.email + "</td>" +
+                                "<td class='username'>" + value.username + "</td>" +
+                                "<td class='password' hidden>" + value.password + "</td>" +
+                                "<td class='role'>" + value.role.roleLevel + "</td>" +
+                                "<td width='10px'><button class='btn btn-xs btn-primary btn-edit-user-management' id='" + index + "'  data-original-title='Edit Row' >" +
+                                "<i class='fa fa-pencil'></i> Edit" + "</button></td>" +
+                                "<td width='10px'><button class='btn btn-xs btn-danger btn-delete-user-management' data-original-title='Hapus Row'>" +
+                                "<i class='fa fa-times'></i> Hapus" + "</button></td>";
+
+                        $("#dt_user_management").find("tbody").append(tr);
+                    });
+
+                    $("#dt_user_management").append("</tbody>");
+
+                    $(".btn-edit-user-management").button().click(function () {
+                        $("input[name='id']").val($(this).closest("tr").find(".idUser").text());
+                        $("input[name='name']").val($(this).closest("tr").find(".name").text());
+                        $("input[name='email']").val($(this).closest("tr").find(".email").text());
+                        $("input[name='username']").val($(this).closest("tr").find(".username").text());
+                        $("input[name='password']").val($(this).closest("tr").find(".password").text());
+                        $("select[name='role']").val($(this).closest("tr").find(".role").text());
+
+                        // focus to form input when click button edit
+                        $(".form-control:visible:enabled:first").focus();
+
+                        $('div').removeClass('has-success has-error has-feedback');
+                        $('div i').removeClass('glyphicon-ok glyphicon-remove');
+                        $('div .help-block').hide();
+                    });
+
+                    // button for delete data Setting Berita
+                    $(".btn-delete-user-management").button().click(function () {
+                        var idUser = $(this).closest("tr").find(".idUser").text();
+                        var id = {id: parseInt(idUser)};
+                        $("#dialog-confirm").dialog({
+                            height: 160,
+                            modal: true,
+                            buttons: {
+                                'Cancel': function () {
+                                    $(this).dialog('close');
+                                    resetForm();
+                                },
+                                'Confirm': function () {
+                                    $.ajax({
+                                        beforeSend: function (request) {
+                                            request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+                                        },
+                                        type: "DELETE",
+                                        contentType: "application/json",
+                                        url: BASE_URL + "setting/users/delete",
+                                        data: JSON.stringify(id),
+                                        success: function (response) {
+                                            $("#dialog-confirm").dialog('close');
+                                            loadDataGrid();
+                                            resetForm();
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    });
+                }
+            }
+        });
+    }
+
+    function validatForm() {
+        $('#form_user_management').bootstrapValidator({
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                name: {
+                    group: '.name',
+                    validators: {
+                        notEmpty: {
+                            message: 'Nama wajib di isi'
+                        }
+                    }
+                },
+                email: {
+                    group: '.email',
+                    validators: {
+                        notEmpty: {
+                            message: 'Email wajib di isi'
+                        },
+                        emailAddress: {
+                            message: 'Alamat email tidak valid'
+                        }
+                    }
+                },
+                username: {
+                    group: '.username',
+                    validators: {
+                        notEmpty: {
+                            message: 'Username wajib di isi'
+                        }
+                    }
+                },
+                password: {
+                    group: '.password',
+                    validators: {
+                        notEmpty: {
+                            message: 'Password wajib di isi'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // button for save form input
+    $(".btn-save-user").button().click(function () {
+        var json = convertFormToJSON($("#form_user_management"));
+        var role = {id: json.role}; // for make role is object
+        JSON.stringify(json['role'] = role);
+        if (json.name != "" && json.email != "" && json.username != "" && json.password != "") {
+            if (json.id == "") {
+                json.id = 0;
+            } else {
+                json.id = parseInt(json.id);
+            }
+
+            $.ajax({
+                beforeSend: function (request) {
+                    request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+                },
+                type: "POST",
+                contentType: "application/json",
+                url: BASE_URL + "setting/users",
+                data: JSON.stringify(json),
+                success: function (response) {
+                    console.log(response);
+                    resetForm();
+                    loadDataGrid();
+                    infoMessage(MESSAGE_TYPE_SAVE_SUCCESS);
+                },
+                error: function() {
+                    infoMessage(MESSAGE_TYPE_SAVE_FAILED);
+                }
+            })
+        } else {
+            infoMessage(MESSAGE_TYPE_SAVE_FAILED);
+            $('div').addClass('has-success has-error has-feedback');
+            $('div i').addClass('glyphicon-ok glyphicon-remove');
+            $('div button i').removeClass('glyphicon-ok glyphicon-remove');
+            $('div .help-block').show();
+        }
+    });
+
+    // button for reset form input
+    $(".btn-clear-user").button().click(function () {
+        resetForm();
+    });
+
+    function styleFocusInput() {
+        var removeCss = true;
+        $('.form-control'). button().click(function() {
+            $('.form-control').css({
+                'background-color': '#fff',
+                'border-color': '#66afe9'
+            });
+
+            removeCss = false;
+        });
+        $("html").click(function () {
+            if (removeCss) {
+                $(".form-control").css({
+                    'background-color': '#fbfbfb',
+                    'border-color': '#ccc'
+                });
+            }
+
+            removeCss = true;
+        });
+    }
+
+    function resetForm() {
+        $('.form-control').prop("disabled", false);
+        $('div').removeClass('has-success has-error has-feedback');
+        $('div i').removeClass('glyphicon-ok glyphicon-remove');
+        $('div .help-block').hide();
+
+        selectedRowData = null;
+        $("input[name='id']").val("");
+        $("input[name='name']").val("");
+        $("input[name='email']").val("");
+        $("input[name='username']").val("");
+        $("input[name='password']").val("");
+        $("select[name='role']").val("");
+    }
+
+    loadScript("js/plugin/bootstrapvalidator/bootstrapValidator.min.js", pagefunction);
+
+</script>

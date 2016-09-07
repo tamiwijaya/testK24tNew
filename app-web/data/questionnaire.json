@@ -1,0 +1,42 @@
+{
+  "data": [
+    {
+      "questionParent": "Aktualitas",
+      "questionnaireDetails": [
+        {
+          "name": "-",
+          "answerQuestions": [
+            "Aktual",
+            "Tidak Aktual"
+          ]
+        }
+      ]
+    },
+    {
+      "questionParent": "Konsistensi Teknis",
+      "questionnaireDetails": [
+        {
+          "name": "Judul",
+          "answerQuestions": [
+            "Sesuai",
+            "Tidak Sesuai"
+          ]
+        },
+        {
+          "name": "Isi",
+          "answerQuestions": [
+            "Sesuai",
+            "Tidak Sesuai"
+          ]
+        },
+        {
+          "name": "Ilustrasi",
+          "answerQuestions": [
+            "Mendukung",
+            "Tidak Mendukung"
+          ]
+        }
+      ]
+    }
+  ]
+}

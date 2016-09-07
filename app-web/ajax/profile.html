@@ -1,0 +1,173 @@
+<!-- Bread crumb is created dynamically -->
+<!-- row -->
+<div class="row">
+    <!-- col -->
+    <div class="col-xs-12">
+        <h1 class="page-title txt-color-blueDark">
+            App Views
+            <i class="fa fa-angle-right fa-fw "></i>
+            <span><a href="#ajax/profile.html">Profile</a></span>
+        </h1>
+    </div>
+    <!-- end col -->
+</div>
+<!-- end row -->
+<section id="widget-grid" class="">
+    <div class="row">
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="padding">
+                <div class="widget-body news-item">
+                    <form class="form-horizontal" id="form_profile_users">
+                        <legend style="border-bottom: 1px solid #EEE;overflow: hidden;">Edit Profile</legend>
+                        <div class="content controls form-group">
+                            <div class="row" style="display: none">
+                                <div class="col-md-2">
+                                    <label>ID User</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="number" name="id" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Nama<span>*</span></label>
+
+                                <div class="col-sm-5 name">
+                                    <input type="text" name="name" placeholder="Nama" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Email<span>*</span></label>
+
+                                <div class="col-sm-5 email">
+                                    <input type="email" name="email" placeholder="Email" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Username<span>*</span></label>
+
+                                <div class="col-sm-5 username">
+                                    <input type="text" name="username" placeholder="Username" class="form-control" required
+                                           readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Password<span>*</span></label>
+
+                                <div class="col-sm-5 password">
+                                    <input type="password" name="password" placeholder="Password" class="form-control"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="form-group hidden-xs">
+                                <div class="col-sm-offset-2 col-sm-5">
+                                    <button type="button" class="btn btn-primary btn_save_profile" style="float: right">
+                                        <i></i> Simpan
+                                    </button>
+                                    <button type="reset" value="Reset" class="btn btn-warning pull-right btn-clear-profile">Reset</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </article>
+        <!-- WIDGET END -->
+    </div>
+    <!-- end row -->
+</section>
+<!-- end widget grid -->
+
+<script type="text/javascript">
+    pageSetUp();
+    var pagefunction = function () {
+        styleFocusInput();
+        initDataProfile();
+    };
+
+    function initDataProfile() {
+        $.getJSON(BASE_URL + "setting/users/find", {
+            id: parseInt(1)
+        }, function (json) {
+            if (json != null) {
+                console.log("json", json);
+                $("input[name='id']").val(json.id);
+                $("input[name='name']").val(json.name);
+                $("input[name='email']").val(json.email);
+                $("input[name='username']").val(json.username);
+                $("input[name='password']").val(json.password);
+            }
+        });
+    }
+
+    function styleFocusInput() {
+        var removeCss = true;
+        $('.form-control').button().click(function () {
+            $('.form-control').css({
+                'background-color': '#fff',
+                'border-color': '#66afe9'
+            });
+
+            removeCss = false;
+        });
+
+        $("html").click(function () {
+            if (removeCss) {
+                $(".form-control").css({
+                    'background-color': '#fbfbfb',
+                    'border-color': '#ccc'
+                });
+            }
+
+            removeCss = true;
+        });
+    }
+
+    // button for save form input
+    $(".btn_save_profile").button().click(function () {
+        var json = convertFormToJSON($("#form_profile_users"));
+        console.log("DATA SIMPAN", json);
+        if (json.name != "" || json.email != "" || json.username != "" || json.password != "") {
+            if (json.id == "") {
+                json.id = 0;
+            } else {
+                json.id = parseInt(json.id);
+            }
+
+            $.ajax({
+                beforeSend: function (request) {
+                    request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+                },
+                type: "POST",
+                contentType: "application/json",
+                url: BASE_URL + "setting/users",
+                data: JSON.stringify(json),
+                success: function (response) {
+                    console.log(response);
+                    resetForm();
+                }
+            })
+        } else {
+            $('div').addClass('has-success has-error has-feedback');
+            $('div i').addClass('glyphicon-ok glyphicon-remove');
+            $('div button i').removeClass('glyphicon-ok glyphicon-remove');
+            $('div .help-block').show();
+        }
+    });
+
+    // button for reset form input
+    $(".btn-clear-profile").button().click(function () {
+        resetForm();
+    });
+
+    function resetForm() {
+        $('.form-control').prop("disabled", false);
+        $('div').removeClass('has-success has-error has-feedback');
+        $('div i').removeClass('glyphicon-ok glyphicon-remove');
+        $('div .help-block').hide();
+
+        $("input[name='password']").val("");
+    }
+
+    loadScript("js/plugin/bootstrapvalidator/bootstrapValidator.min.js", pagefunction);
+
+</script>

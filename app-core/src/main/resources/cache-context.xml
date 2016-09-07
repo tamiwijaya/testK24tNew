@@ -1,0 +1,80 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <cache:annotation-driven key-generator="enhancedDefaultKeyGenerator"/>
+
+    <bean id="enhancedDefaultKeyGenerator"
+          class="id.or.greenlabs.app.core.util.EnhancedDefaultKeyGenerator"/>
+
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <constructor-arg ref="ehcache"/>
+    </bean>
+
+    <bean id="ehcache"
+          class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="shared" value="true"/>
+    </bean>
+
+    <!-- cache definitions -->
+    <!-- <cache:advice id="cacheUsers" cache-manager="cacheManager">
+         <cache:caching cache="users">
+             <cache:cacheable method="find"
+                              key="T(java.lang.String).valueOf(#subscribe).concat('-').concat(#limit).concat('-').concat(#offset)"/>
+             <cache:cacheable method="find"
+                              key="T(java.lang.String).valueOf(#user).concat('-').concat(#limit).concat('-').concat(#offset)"/>
+             <cache:cacheable method="findSubscriber" key="#user.id"/>
+             <cache:cache-evict method="sendMessages" all-entries="true" key="#user"/>
+             <cache:cache-evict method="sendMessages" all-entries="true" key="#subscribe"/>
+             <cache:cache-evict method="delete" key="T(java.lang.String).valueOf(#user)"/>
+         </cache:caching>
+     </cache:advice>-->
+
+  <!--  <cache:advice id="cacheReadAccessToken" cache-manager="cacheManager">
+        <cache:caching cache="readAccessToken">
+            <cache:cacheable method="readAccessToken" key="T(java.lang.String).valueOf(#tokenValue)"/>
+            &lt;!&ndash;<cache:cacheable method="readAuthentication" key="T(java.lang.String).valueOf(#accessTokenValue)"/>&ndash;&gt;
+            <cache:cache-evict method="removeAccessToken" key="T(java.lang.String).valueOf(#token)"/>
+        </cache:caching>
+    </cache:advice>
+
+    <cache:advice id="cacheClientDetail" cache-manager="cacheManager">
+        <cache:caching cache="clientDetail">
+            <cache:cacheable method="loadClientByClientId" key="T(java.lang.String).valueOf(#clientId)"/>
+            <cache:cache-evict method="updateClientDetails" key="T(java.lang.String).valueOf(#clientId)"/>
+            <cache:cache-evict method="removeClientDetails" key="T(java.lang.String).valueOf(#clientId)"/>
+            <cache:cache-evict method="updateClientSecret"/>
+        </cache:caching>
+    </cache:advice>-->
+
+
+    <!-- <cache:advice id="cacheVenues" cache-manager="cacheManager">
+         <cache:caching cache="venues">
+             <cache:cacheable method="find" key="T(java.lang.String).valueOf(#param).concat('-').concat(#limit).concat('-').concat(#offset)"/>
+             <cache:cache-evict method="sendMessages" all-entries="true"/>
+             <cache:cache-evict method="delete" key="#param"/>
+         </cache:caching>
+     </cache:advice>
+
+     <cache:advice id="cacheTimelines" cache-manager="cacheManager">
+         <cache:caching cache="timelines">
+             <cache:cacheable method="find" key="T(java.lang.String).valueOf(#param).concat('-').concat(#limit).concat('-').concat(#offset)"/>
+             <cache:cache-evict method="sendMessages" all-entries="true"/>
+             <cache:cache-evict method="delete" key="#param"/>
+         </cache:caching>
+     </cache:advice>-->
+
+
+    <!-- apply the cacheable behavior to all Service interfaces -->
+    <aop:config>
+     <!--   <aop:advisor advice-ref="cacheReadAccessToken"
+                     pointcut="execution(* org.springframework.security.oauth2.provider.token.store.JdbcTokenStore.*(..))"/>
+        <aop:advisor advice-ref="cacheClientDetail"
+                     pointcut="execution(* org.springframework.security.oauth2.provider.client.JdbcClientDetailsService.*(..))"/>-->
+    </aop:config>
+
+</beans>

@@ -1,0 +1,292 @@
+<!-- Bread crumb is created dynamically -->
+<!-- row -->
+<div class="row">
+    <!-- col -->
+    <div class="col-xs-12">
+        <h1 class="page-title txt-color-blueDark">
+            Master
+            <i class="fa fa-angle-right fa-fw "></i>
+            <span><a href="#view/questionnaire.html">Kuisioner Berita</a></span>
+        </h1>
+    </div>
+    <!-- end col -->
+</div>
+<!-- end row -->
+<!-- widget grid -->
+<section id="widget-grid" class="">
+    <div class="row">
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="padding">
+                <form id="input_question" class="form-horizontal smart-form quest-form quest-berita">
+                    <legend style="border-bottom: 1px solid #EEE;padding-bottom:10px;margin-bottom:0;">
+                        Kuisioner Berita
+                    </legend>
+
+                    <!-- input-field -->
+                    <fieldset class="input-field">
+                        <div id="topik" class="title-quest" name="topik">
+                        </div>
+                        <!--<div class="row">-->
+                        <!--<section class="col-sm-10 col-md-5">-->
+                        <!--<div class="grid-input">-->
+                        <!--<label class="label-left">Topik/Thread</label>-->
+                        <!--<select class="form-control validate[required]" name="topik" id="topik"-->
+                        <!--onchange="onComboBoxTopikChanges()" placeholder="Topik">-->
+                        <!--</select>-->
+                        <!--</div>-->
+                        <!--</section>-->
+                        <!--</div>-->
+
+                        <div class="widget-body class_wizard">
+                            <!--<form class="form-horizontal form_wizard ">-->
+                            <!--<ul style="list-style-type:none; padding-left: 5px">-->
+                            <!--</ul>-->
+                            <!--</form>-->
+                        </div>
+
+                        <footer class="row">
+                            <div class="col-xs-12">
+                                <button type="button" id="btnInput"
+                                        class="btn btn-primary btn_save_transaksi_questionnaire">
+                                    Simpan
+                                </button>
+                            </div>
+                        </footer>
+                    </fieldset>
+                    <!-- end -->
+
+                    <!-- start step form -->
+
+                    <!-- end step form -->
+                </form>
+            </div>
+            <!--<div class="padding">-->
+            <!--</div>-->
+            <!-- end padding -->
+        </article>
+        <!-- WIDGET END -->
+    </div>
+    <!-- end row -->
+</section>
+<!-- end widget grid -->
+
+<script type="text/javascript">
+    pageSetUp();
+    var uniqId = 0; // sebagai uniq questionChild dan answerQuestion
+    var idTopik;    // sebagai variabel global dari id topik
+    var dataParent = []; //sebagai penampung seluruh data yang akan dikirim ke server
+    var point = 0;
+
+    var pagefunction = function () {
+        initTopik();
+        setupWizard();
+    };
+
+    function initTopik() {
+        $select = $('#topik');
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            url: BASE_URL + "master/quiz",
+            dataType: "JSON",
+            type: "GET",
+            success: function (result) {
+                if (typeof(result) === "undefined" || result === null) {
+                    $select.html('<p>none available</p>');
+                    $(".topik").removeClass('ajax_loader');
+                    return;
+                }
+
+                $select.html('');
+                $.each(result, function (key, val) {
+                    $select.append('<p>' + val.name + '</p>');
+                });
+
+                $(".topik").removeClass('ajax_loader');
+            },
+            error: function () {
+                console.log('topik');
+                $select.html('<p>none available</p>');
+            }
+        });
+    }
+
+    function setupWizard() {
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            url: BASE_URL + "master/questionnaires",
+            dataType: "JSON",
+            type: "GET",
+            success: function (result) {
+                $(".class_wizard").show();
+                $("#form_wizard").empty();
+                var questionnaireIndex = 0; //sebagai penanda index dari arrray questionnaire
+                $.each(result, function (key, data) {
+                    var questionnaireDetailIndex = 0; // sebagai penanda index dari array questionnaire detail
+                    var rowNumber = parseInt(key) + 1; // sebagai penghitung nomor pada baris
+                    var question = data.question;
+                    var lengthDetail = data.questionnaireDetails.length;
+                    var jsonData = {
+                        id: data.id,
+                        idArtikel: "1",  // sementara hardcode seharusnya dapet dari url
+                        question: question,
+                        questionnaireDetails: []
+                    };
+
+                    //gunakan dinamis template untuk menentukan apakah row punya sub atau tidak
+                    var formData;
+                    if (lengthDetail == 1) { //single record
+                        formData = '<div class="single-data-quest">' +
+                                '<label name="' + rowNumber + '"  class="number">' + rowNumber + '</label>' +
+                                '<label id="question" class="name-input-single">' + question + '</label>';
+                    } else { //multi record
+                        formData = '<div class="multi-data-quest">' +
+                                '<label name="' + rowNumber + '"  class="number">' + rowNumber + '</label>' +
+                                '<label id="question" class="name-input-multi">' + question + '</label>';
+                    }
+
+                    $(".class_wizard").append(formData);
+
+                    $.each(data.questionnaireDetails, function (key, val) {
+                        var answerQuestion_1 = "";
+                        var answerQuestion_2 = "";
+                        var valueQuestion_1 = false;
+                        var valueQuestion_2 = false;
+                        var id = val.id; //id detail
+                        var questionnaireDetailName = val.name;
+
+                        // untuk detail answer question
+                        var index = 0;
+                        $.each(val.answerQuestions, function (key, value) {
+                            if (index == 0) {
+                                answerQuestion_1 = key;
+                                valueQuestion_1 = value;
+                                if (lengthDetail == 1) { //single row
+                                    $(".class_wizard").append('<label class="sub-single"><input checked parent-index = ' + questionnaireIndex + ' detail-index = ' + questionnaireDetailIndex + ' detail-value=true type="checkbox" class="check" value=' + 1 + ' id=' + [id + "_" + questionnaireDetailName + "_" + index] + ' name="answerQuestion_' + id + '">' +
+                                            '<span>' + answerQuestion_1 + '</span>' +
+                                            '</label>');
+
+                                } else {
+                                    $(".class_wizard").append('<label class="name-input-submulti">' + questionnaireDetailName + '</label>' +
+                                            '<label class="sub-multi"><input checked parent-index = ' + questionnaireIndex + ' detail-index = ' + questionnaireDetailIndex + ' detail-value=true type="checkbox" class="check" value= ' + (1 / lengthDetail) + ' name="answerQuestion_' + id + '" id=' + [id + "_" + questionnaireDetailName + "_" + index] + ' >' +
+                                            '<span>' + answerQuestion_1 + '</span>' +
+                                            '</label>');
+                                }
+
+                                if (valueQuestion_1 == false) {
+                                    $("#" + id + "_" + questionnaireDetailName + "_" + index).removeAttr("checked");
+                                }
+                            } else {
+                                answerQuestion_2 = key;
+                                valueQuestion_2 = value;
+                                if (lengthDetail == 1) { //single row
+                                    $(".class_wizard").append('<label class="sub-single"><input checked parent-index = ' + questionnaireIndex + ' detail-index = ' + questionnaireDetailIndex + ' detail-value=false type="checkbox" class="check" value=' + 0 + ' id=' + [id + "_" + questionnaireDetailName + "_" + index] + '  name="answerQuestion_' + id + '">' +
+                                            '<span>' + answerQuestion_2 + '</span></label>' +
+                                            '<hr style="margin-top:20px;">');
+
+                                } else {
+                                    $(".class_wizard").append('<label class="sub-multi"><input checked parent-index = ' + questionnaireIndex + ' detail-index = ' + questionnaireDetailIndex + ' detail-value=false type="checkbox" class="check" value = ' + 0 + ' name="answerQuestion_' + id + '" id=' + [id + "_" + questionnaireDetailName + "_" + index] + '  >' +
+                                            '<span>' + answerQuestion_2 + '</span>' +
+                                            '</label>' +
+                                            '</div>' +
+                                            '<hr>');
+                                }
+
+                                if (valueQuestion_2 == false) {
+                                    $("#" + id + "_" + questionnaireDetailName + "_" + index).removeAttr("checked");
+                                }
+                            }
+
+                            index++;
+                        });
+
+                        jsonData.questionnaireDetails.push({
+                            id: val.id,
+                            point: (1 / lengthDetail),
+                            name: questionnaireDetailName,
+                            answerQuestions: JSON.parse('{"' + answerQuestion_1 + '":' + valueQuestion_1 + ',"' + answerQuestion_2 + '":' + valueQuestion_2 + '}')
+                        });
+
+                        formData += '</div>';
+                        questionnaireDetailIndex++;
+                    });
+
+                    dataParent.push(jsonData);
+                    questionnaireIndex++;
+                });
+
+                $(':checkbox').on('change', function () {
+                    var check = $(this), name = check.prop('name');
+                    var total = 0;
+                    if (check.is(':checked')) {
+                        $(':checkbox[name="' + name + '"]').not($(this)).prop('checked', false);
+                        $(".check:checked").each(function () {
+                            total += parseFloat($(this).val());
+                        });
+
+                        point = parseFloat($(this).val()); //hitung point per selected checkbox
+
+                        var selectedDetail = dataParent[this.getAttribute('parent-index')].questionnaireDetails[this.getAttribute('detail-index')]; // ambil selected data in json array
+                        var answerQuestions = selectedDetail.answerQuestions; // ambil selected answer question
+                        var attrNameX = "{"; // property answerQuestion 1 / bisa true/false
+                        var attrNameY = ""; // property answerQuestion 2 / bisa true/false
+                        var counter = 0; // sebagai validasi fix property yang akan diubah
+                        for (var attrName in answerQuestions) { // karena property dinamis maka perlu dilakukan penambahan secara manual dengan menggunakan for-in
+                            if (counter == 0) {
+                                //property pertama
+                                if (this.getAttribute('detail-value') == "true") {
+                                    attrNameX += '"' + attrName + '":' + true + ',';
+                                } else {
+                                    attrNameX += '"' + attrName + '":' + false + ',';
+                                }
+                            } else {
+                                //property kedua
+                                if (this.getAttribute('detail-value') == "true") {
+                                    attrNameY += '"' + attrName + '":' + false + '}';
+                                } else {
+                                    attrNameY += '"' + attrName + '":' + true + '}';
+                                }
+                            }
+
+                            counter++;
+                        }
+
+                        selectedDetail.answerQuestions = JSON.parse(attrNameX + attrNameY); //replace answerQuestion dengan data baru
+                        //console.log("json value : ", JSON.stringify(dataParent[this.getAttribute('parent-index')].questionnaireDetails[this.getAttribute('detail-index')]));
+                    }
+                });
+            },
+            error: function () {
+                console.log('topik');
+                $select.html('<option value="">none available</option>');
+            }
+        });
+    }
+
+    // button for save form input
+    $(".btn_save_transaksi_questionnaire").button().click(function () {
+        var data = [];
+        var json = convertFormToJSON($("#input_question"));
+        console.log("JSON", JSON.stringify(dataParent));
+
+        console.log("Saving Item Into Database", data);
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            type: "POST",
+            contentType: "application/json",
+            url: BASE_URL + "transaction/questionnaire",
+            data: JSON.stringify(dataParent),
+            success: function (response) {
+                console.log("Response", response);
+            }
+        })
+    });
+
+    loadScript("js/plugin/jquery-step/jquery.steps.min.js", pagefunction);
+
+</script>

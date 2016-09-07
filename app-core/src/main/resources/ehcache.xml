@@ -1,0 +1,13 @@
+<ehcache maxBytesLocalDisk="50G" maxBytesLocalHeap="50%"
+         eternal="true" dynamicConfig="true" overflowToDisk="true" updateCheck="true"
+         monitoring="autodetect" memoryStoreEvictionPolicy="LRU">
+
+    <sizeOfPolicy maxDepth="100" maxDepthExceededBehavior="abort"/>
+
+    <diskStore path="${cache.path}"/>
+
+  <!--  <cache name="users"/>-->
+ <!--   <cache name="timelines"/>
+    <cache name="venues"/>-->
+
+</ehcache>

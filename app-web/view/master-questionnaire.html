@@ -1,0 +1,676 @@
+<!-- Bread crumb is created dynamically -->
+<!-- row -->
+<div class="row">
+    <!-- col -->
+    <div class="col-xs-12">
+        <h1 class="page-title txt-color-blueDark">
+            Master
+            <i class="fa fa-angle-right fa-fw"></i>
+            <span><a href="#view/master-questionnaire.html">Master Kuisioner</a></span>
+        </h1>
+    </div>
+    <!-- end col -->
+</div>
+<!-- end row -->
+<!-- widget grid -->
+<section id="widget-grid">
+    <!-- add-question -->
+    <div class="add-question visible">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="padding padding-color">
+                    <legend>Kuis</legend>
+                    <form id="form_quiz" class="form-horizontal smart-form quest-form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-8 col-lg-5">
+                                <input type="text" class="form-control" name="id"
+                                       placeholder="Id Kuis"
+                                       style="padding-left:10px; display: none">
+                                <input type="text" class="form-control" id="name" name="name"
+                                       placeholder="Nama Kuis"
+                                       style="padding-left:10px;">
+                                <span class="btn-next-group">
+                                    <button class="btn" type="button" id="btn_next">
+                                        Next <i class="fa fa-arrow-circle-right"></i></button>
+                                </span>
+                                <span class="input-group-btn btn-simpan-group" hidden>
+                                    <button class="btn btn-primary" type="button" id="btn_simpan_quiz"
+                                            style="display: none">
+                                        Simpan
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!--<div class="padding">-->
+                <!--</div>-->
+                <!-- end padding -->
+            </article>
+            <!-- WIDGET END -->
+        </div>
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="padding">
+                    <table id="table_quiz" class="table table-bordered table-hover" width="100%">
+                        <thead>
+                        <tr>
+                            <td align="center" hidden>ID</td>
+                            <td align="center">Nama Kuis</td>
+                            <td align="center" rowspan='1' colspan='3'>Actions</td>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+                <!--<div class="padding">-->
+                <!--</div>-->
+                <!-- end padding -->
+            </article>
+            <!-- WIDGET END -->
+        </div>
+    </div>
+    <div class="add-data hidden">
+        <div class="row">
+            <div class="form-container">
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="padding">
+                        <legend style="border-bottom: 1px solid #EEE;padding-bottom:10px;margin-bottom:0;overflow: hidden;">
+                            <div class="row">
+                                <div class="col-xs-6">Master Kuisioner</div>
+                                <div class="col-xs-6">
+                                    <button type="button" id="btn_cancel_quest" class="btn btn-primary btn-back">
+                                        <i class="fa fa-long-arrow-left"></i> Batal
+                                    </button>
+                                </div>
+                            </div>
+                        </legend>
+                        <form id="form_questionnaire" class="form-horizontal smart-form quest-form">
+                            <form id="input_questions" class="form-horizontal smart-form quest-form quest-berita">
+                                <div id="row-input" class="row">
+                                    <div class="scrroll-quest">
+                                        <div class="col-xs-12 col-sm-8 col-lg-6">
+                                            <label class="label-left col-sm-1 control-label"
+                                                   style="font-size:24px;padding:0;margin-left:-10px;">
+                                                Q1
+                                            </label>
+
+                                            <div class="col-sm-11" style="margin-bottom:10px;float:right;">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="question"
+                                                           style="padding-left:10px;">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-primary btn-add-sub" type="button"
+                                                                id="btnSub">
+                                                            <i class="material-icons"> &#xE145;</i></button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <!-- sart sub inpput two-->
+                                            <div id="sub-input-one"></div>
+                                            <div id="sub-input-two"></div>
+                                            <!-- end -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-lg-6">
+                                            <div class="left-col-row">
+                                                <div class="checked-main">
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" id="checkboxSub"><i></i>Add Sub
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7 col-md-offset-3">
+                                    <div class="pull-right">
+                                        <button type="button" id="btn_simpan"
+                                                class="btn btn-success btn-save-transaksi-questionnaire">
+                                            Tambah Data
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </form>
+                    </div>
+                    <!--<div class="padding">-->
+                    <!--</div>-->
+                    <!-- end padding -->
+
+                    <div id="dialog-confirm" title="Confirm" hidden>
+                        <div><p>
+                            <span class="ui-icon-alert" style="float:left; overflow: hidden; height: 25px"></span>
+                            Anda yakin akan menghapus data ini
+                        </p></div>
+                    </div>
+                </article>
+            </div>
+            <!-- WIDGET END -->
+        </div>
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="padding">
+                    <form id="form_question" class="form-horizontal smart-form quest-form quest-berita">
+                        <legend style="border-bottom: 1px solid #EEE;padding-bottom:10px;margin-bottom:0;overflow:hidden;">
+                            <div class="row">
+                                <div class="col-xs-6">Kuisioner Berita</div>
+                                <div class="col-xs-6">
+                                    <button type="button" id="btn_back_quest" class="btn btn-primary btn-back">
+                                        <i class="fa fa-long-arrow-left"></i> Kembali
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="button-action">
+                                <button type="button" id="btn_save_data" class="btn btn-success btn-kuisioner-berita">
+                                    Simpan
+                                </button>
+                                <button type="button" id="btn_clear_data" class="btn btn-danger btn-kuisioner-berita"
+                                        style="margin-right:10px !important;">
+                                    Hapus
+                                </button>
+                            </div>
+                        </legend>
+                        <!-- input-field -->
+                        <fieldset class="input-field class_form">
+                        </fieldset>
+                        <!-- end -->
+                    </form>
+                </div>
+                <!--<div class="padding">-->
+                <!--</div>-->
+                <!-- end padding -->
+            </article>
+            <!-- WIDGET END -->
+        </div>
+    </div>
+</section>
+<!-- end widget grid -->
+
+<script type="text/javascript">
+    pageSetUp();
+
+    var pagefunction = function () {
+        btnBack();
+        btnCancel();
+        scrollQuest();
+        validateForm();
+        clearQuestionnaire();
+        initQuiz();
+    };
+
+    function btnBack() {
+        $('#btn_back_quest').click(function () {
+            $('.add-data').removeClass("visible").addClass("hidden");
+            $('.add-question').removeClass("hidden").addClass("visible");
+        });
+    }
+
+    function btnCancel() {
+        $('#btn_cancel_quest').click(function () {
+            $('.add-data').removeClass("visible").addClass("hidden");
+            $('.add-question').removeClass("hidden").addClass("visible");
+        });
+    }
+
+    function scrollQuest() {
+        $('.scrroll-quest').slimScroll({
+            color: '#ccc',
+            size: '7px',
+            railVisible: true,
+            alwaysVisible: true
+        });
+    }
+
+    function initQuiz() {
+        $("#table_quiz").find("tbody").remove();
+        console.log("---",sessionStorage.getItem('token'));
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            type: "GET",
+            contentType: "application/json",
+            url: BASE_URL + "master/quizes",
+            success: function (response) {
+                $("#table_quiz").append("<tbody class='table_body_quiz'>");
+                $.each(response, function (index, value) {
+                    var tr = "<tr>" +
+                            "<td class='idQuiz' style='display: none' >" + value.id + "</td>" +
+                            "<td class='name'>" + value.name + "</td>" +
+                            "<td width='10px'><button class='btn btn-xs btn-primary' id='btn_detail_quiz" + value.id + "'  data-original-title='Detail Row' >" +
+                            "<i class='fa fa-pencil'></i> Detail" + "</button></td>" +
+                            "<td width='10px'><button class='btn btn-xs btn-warning' id='btn_edit_quiz" + value.id + "'  data-original-title='Detail Row' >" +
+                            "<i class='fa fa-pencil'></i> Edit" + "</button></td>" +
+                            "<td width='10px'><button class='btn btn-xs btn-danger' id='btn_delete_quiz" + value.id + "'  data-original-title='Hapus Row'>" +
+                            "<i class='fa fa-times'></i> Hapus" + "</button></td>";
+
+                    $("#table_quiz").find("tbody").append(tr);
+
+                    editQuiz(value.id);
+                    detailQuiz(value.id);
+                    deleteQuiz(value.id);
+                });
+
+                $("#table_quiz").append("</tbody>");
+            }
+        });
+    }
+
+    var isEdit = false;
+
+    function detailQuiz(id) {
+        $("#btn_detail_quiz" + id).button().click(function () {
+            $.ajax({
+                beforeSend: function (request) {
+                    request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+                },
+                type: "GET",
+                contentType: "application/json",
+                url: BASE_URL + "master/questionnaires?id_quiz=" + id,
+                success: function (response) {
+                    isEdit = true;
+                    showResult(response);
+                    //sesuaikan tampilan pada saat show detail
+                    $('.add-question').removeClass('visible').addClass('hidden');
+                    $('.add-data').removeClass('hidden').addClass('visible');
+                    $('.form-container').removeClass('visible').addClass('hidden');
+                    $('.button-action').removeClass('visible').addClass('hidden');
+                }
+            });
+        });
+    }
+
+    function editQuiz(id) {
+        $("#btn_edit_quiz" + id).button().click(function () {
+            $("input[name='id']").val($(this).closest("tr").find(".idQuiz").text());
+            $("input[name='name']").val($(this).closest("tr").find(".name").text());
+            $("#btn_simpan_quiz").show();
+            $("#btn_next").hide();
+        });
+    }
+
+    $("#btn_simpan_quiz").button().click(function () {
+        var json = convertFormToJSON($("#form_quiz"));
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            type: "POST",
+            contentType: "application/json",
+            url: BASE_URL + "master/quizes",
+            data: JSON.stringify(json),
+            success: function (response) {
+                $("input[name='id']").val("");
+                $("input[name='name']").val("");
+                $("#btn_simpan_quiz").hide();
+                $("#btn_next").show();
+                initQuiz();
+                infoMessage(MESSAGE_TYPE_SAVE_SUCCESS);
+            }
+        });
+    });
+
+    function deleteQuiz(id) {
+        $("#btn_delete_quiz" + id).button().click(function () {
+            var data = {
+                "name": $(this).closest("tr").find(".name").text(),
+                "isDelete": true,
+                "id": id
+            };
+
+            $("#dialog-confirm").dialog({
+                height: 160,
+                modal: true,
+                buttons: {
+                    'Cancel': function () {
+                        $(this).dialog('close');
+                    },
+                    'Confirm': function () {
+                        $.ajax({
+                            beforeSend: function (request) {
+                                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+                            },
+                            type: "DELETE",
+                            contentType: "application/json",
+                            url: BASE_URL + "master/quizes/delete",
+                            data: JSON.stringify(data),
+                            success: function (response) {
+                                $("#dialog-confirm").dialog('close');
+                                $("#table_quiz").find("tbody").remove();
+                                initQuiz();
+                                infoMessage(MESSAGE_TYPE_DELETE_SUCCESS);
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    }
+
+    function validateForm() {
+        $('#form_quiz').bootstrapValidator({
+            fields: {
+                name: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Wajib di isi'
+                        }
+                    }
+                }
+            }
+        });
+
+        $('#btn_next').prop('disabled', true); //add atribute disabled button next
+        $('#name').keyup(function () { // disabled button next jika input quis kosong
+            if ($(this).val().length != 0) {
+                $('#btn_next').prop('disabled', false);
+            } else {
+                $('#btn_next').prop('disabled', true);
+            }
+        });
+    }
+
+    $('#checkboxSub').change(function () {
+        if (this.checked) {
+            $("#sub-input-one").empty();
+        } else {
+            $("#sub-input-two").empty();
+        }
+    });
+
+    $('#btnSub').click(function () {
+        if ($('#checkboxSub').filter(':checked').length == 1) {
+            $('#sub-input-two').append('<div id="sub-two"><div id="row-input" class="row">' +
+                    '<div class="col-sm-12">' +
+                    '<div style="margin-bottom:10px;overflow:hidden;">' +
+                    '<div class="col-xs-12">' +
+                    '<label class="label-left col-sm-2 control-label">Detail</label>' +
+                    '<label class="input col-sm-10"><input type="text" name="questionDetails"></label>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="sub-input">' +
+                    '<div id="row-sub-menu" class="row">' +
+                    '<div class="col-xs-12">' +
+                    '<label class="label-left col-sm-2 control-label">Pilihan 1</label>' +
+                    '<label class="input col-sm-10"><input type="text" name="option"></label>' +
+                    '</div>' +
+                    '</div>' + // end row-sub-menu
+                    '<div id="row-sub-menu" class="row">' +
+                    '<div class="col-xs-12">' +
+                    '<label class="label-left col-sm-2 control-label">Pilihan 2</label>' +
+                    '<label class="input col-sm-10"><input type="text" name="option"></label>' +
+                    '</div>' +
+                    '</div>' + // end row-sub-menu
+                    '</div>' + //sub-input
+                    '</div>' + // end col 6
+                    '</div></div>'); // end sub-two
+        } else {
+            $('#sub-input-one').append('<div id="sub-one"><div id="sub-default" class="sub-input">' +
+                    '<div id="row-sub-menu" class="row">' +
+                    '<div class="col-xs-12">' +
+                    '<label class="label-left col-sm-2 control-label">Pilihan 1</label>' +
+                    '<label class="input col-sm-10"><input type="text" id="option" name="option"></label>' +
+                    '</div>' +
+                    '</div>' + // end row-sub-menu
+                    '<div id="row-sub-menu" class="row">' +
+                    '<div class="col-xs-12">' +
+                    '<label class="label-left col-sm-2 control-label">Pilihan 2</label>' +
+                    '<label class="input col-sm-10"><input type="text" id="option" name="option"></label>' +
+                    '</div>' +
+                    '</div>' + // end row-sub-menu
+                    '</div></div>'); // end sub-one
+        }
+    });
+
+    var jsonData = [];
+    var idQuiz = 0;
+
+    $('.btn-save-transaksi-questionnaire').click(function () {
+        var result = convertFormToJSON($("#form_questionnaire"));
+        var json = {
+            id: 0,
+            quiz: {"id": idQuiz}, //nantinya ambil dari cookie
+            question: result.question,
+            answer: "",
+            questionnaireDetails: [],
+            questionnaireChilds: []
+        };
+
+        if ($('#checkboxSub').filter(':checked').length == 0) { //single row
+            $.each(result['option'], function (index, object) {
+                var option = "";
+                if (object == 0) {
+                    option += '{"option" : ' + '"' + object + '",' +
+                            '"choice" : "false"' + '}';
+
+                } else {
+                    option += '{' +
+                            '"option" : ' + '"' + object + '",' +
+                            '"choice" : "false"' + '}';
+                }
+
+                json.questionnaireDetails.push(JSON.parse(option));
+            });
+
+            json.answer = "-";
+        } else { //multiple
+            if (result['questionDetails'] instanceof Array) {
+                var position = 0;
+                $.each(result['questionDetails'], function (index, object) {
+                    var jsonDetail = {
+                        question: result['questionDetails'][index],
+                        answer: "*",
+                        questionnaireDetails: [],
+                    };
+
+                    for (var i = 0; i < 2; i++) {
+                        var option = "";
+                        if (i == 0) {
+                            option += '{"option" : ' + '"' + result['option'][position] + '",' +
+                                    '"choice" : "false"' + '}';
+                        } else {
+                            option += '{' +
+                                    '"option" : ' + '"' + result['option'][position] + '",' +
+                                    '"choice" : "false"' + '}';
+                        }
+
+                        jsonDetail.questionnaireDetails.push(JSON.parse(option));
+                        position++;
+                    }
+
+                    json.questionnaireChilds.push(jsonDetail);
+                });
+            } else {
+                var jsonDetail = {
+                    question: result['questionDetails'],
+                    answer: "*",
+                    questionnaireDetails: []
+                };
+
+                $.each(result['option'], function (index, object) {
+                    var option = "";
+                    if (index == 0) {
+                        option += '{"option" : ' + '"' + object + '",' +
+                                '"choice" : "false"' + '}';
+
+                    } else {
+                        option += '{' +
+                                '"option" : ' + '"' + object + '",' +
+                                '"choice" : "false"' + '}';
+                    }
+
+                    jsonDetail.questionnaireDetails.push(JSON.parse(option));
+                });
+
+                json.questionnaireChilds.push(jsonDetail);
+            }
+        }
+
+        jsonData.push(json);
+        showResult(jsonData);
+
+        //reset form
+        $("#sub-input-one").empty();
+        $("#sub-input-two").empty();
+        $(".form-control").val("");
+
+    });
+
+    /**
+     * Tampilkan hasil dari input
+     * @param param
+     */
+    function showResult(param) {
+        $(".class_form").show();
+        $(".class_form").empty();
+
+        var questionnaireIndex = 0; //sebagai penanda index dari arrray questionnaire
+        $.each(param, function (index, data) {
+            var rowNumber = parseInt(index) + 1; // sebagai penghitung nomor pada baris
+            var question = data.question;
+            if (data.questionnaireDetails.length > 0) {  //single row
+                $(".class_form").append('<div class="single-data-quest">' +
+                        '<label name="' + rowNumber + '"  class="number">' + rowNumber + '.</label>' +
+                        '<label id="question" class="name-input-single">' + question + '</label>');
+
+                $.each(data.questionnaireDetails, function (index, object) {
+                    if (index == 0) {
+                        $(".class_form").append('<label class="checkbox sub-single">' +
+                                '<input type="checkbox" detail-value=true class="check"><i></i>' +
+                                '<span>' + object.option + '</span>' +
+                                '</label>');
+                    } else {
+                        $(".class_form").append('<label class="checkbox sub-single">' +
+                                '<input type="checkbox" class="check" value=""><i></i>' +
+                                '<span>' + object.option + '</span>' +
+                                '</label>' +
+                                '<div class="delete-quest single">' +
+                                '<button type="button" id="btn_delete_detail' + questionnaireIndex + '" class="btn btn-danger btn-xs"><i class="fa fa-times""></i> Delete</button>' +
+                                '</div>' +
+                                '<hr style="margin-top:10px;"></div>');
+                    }
+                });
+            } else {
+                $(".class_form").append('<div class="multi-data-quest">' +
+                        '<label name="' + rowNumber + '"  class="number">' + rowNumber + '.</label>' +
+                        '<label id="question" class="name-input-multi">' + question + '</label>' +
+                        '<div class="delete-quest">' +
+                        '<button type="button" id="btn_delete_detail' + questionnaireIndex + '" class="btn btn-danger btn-xs"><i class="fa fa-times""></i> Delete</button>' +
+                        '</div>');
+
+                $.each(data.questionnaireChilds, function (index, object) {
+                    $(".class_form").append('<label class="name-input-submulti">' + object['question'] + '</label>');
+                    $.each(object['questionnaireDetails'], function (index, object) {
+                        if (index == 0) {
+                            $(".class_form").append('<label class="checkbox sub-multi">' +
+                                    '<input type="checkbox" detail-value=true class="check"><i></i>' +
+                                    '<span>' + object.option + '</span>' +
+                                    '</label>');
+                        } else {
+                            $(".class_form").append('<label class="checkbox sub-multi">' +
+                                    '<input type="checkbox" class="check"><i></i>' +
+                                    '<span>' + object.option + '</span>' +
+                                    '</label>' +
+                                    '</div>' +
+                                    '<hr style="margin-top:10px;">');
+                        }
+                    });
+                });
+            }
+
+            if (isEdit) {
+                $(".delete-quest").empty(); //hide delete button ketika show detail
+            }
+
+            $('#btn_delete_detail' + questionnaireIndex).click(function () {
+                param.splice(param.indexOf(data), 1);
+                showResult(param); // panggil ulang untuk refresh
+            });
+
+            questionnaireIndex++;
+        });
+    }
+
+    function clearQuestionnaire() {
+        $('#btn_clear_data').click(function () {
+            $(".class_form").empty();
+            showResult(jsonData = []);
+        });
+    }
+
+    $('#btn_next').click(function () {
+        var json = convertFormToJSON($("#form_quiz"));
+        if (json.id == "") {
+            json.id = 0;
+        } else {
+            json.id = parseInt(json.id);
+        }
+
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            type: "POST",
+            contentType: "application/json",
+            url: BASE_URL + "master/quizes",
+            data: JSON.stringify(json),
+            success: function (response) {
+                if (response['status'] == 'OK') {
+                    idQuiz = response['data'].id;
+                    if ($('.add-data').hasClass('hidden')) {
+                        $('.add-data').removeClass('hidden').addClass('visible');
+                        $('#btn_back_quest').addClass('hidden');
+                    } else {
+                        $('.add-data').removeClass('visible').addClass('hidden');
+                    }
+
+                    $('.add-question').removeClass('visible').addClass('hidden');
+                } else {
+                    infoMessage(MESSAGE_TYPE_SAVE_FAILED);
+                }
+            },
+            error: function () {
+                infoMessage(MESSAGE_TYPE_SAVE_FAILED);
+            }
+        });
+    });
+
+    $('#btn_save_data').click(function () {
+        console.log("Response", JSON.stringify(jsonData));
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            type: "POST",
+            contentType: "application/json",
+            url: BASE_URL + "master/questionnaires",
+            data: JSON.stringify(jsonData),
+            success: function (response) {
+                console.log("Response", response.data);
+                if (response.data == 'OK') {
+                    showResult(jsonData = []);
+                    infoMessage(MESSAGE_TYPE_SAVE_SUCCESS);
+                    if ($('.add-question').hasClass('visible')) {
+                        $('.add-question').removeClass('visible').addClass('hidden');
+                    } else {
+                        $('.add-question').removeClass('hidden').addClass('visible');
+                    }
+
+                    $('.add-data').removeClass('visible').addClass('hidden');
+                    $("html, body").animate({scrollTop: 0}, 300);
+                } else {
+                    infoMessage(MESSAGE_TYPE_SAVE_FAILED);
+                }
+            },
+            error: function () {
+                infoMessage(MESSAGE_TYPE_SAVE_FAILED);
+            }
+        })
+    });
+
+    loadScript("js/plugin/slimscroll/jquery.slimscroll.min.js", function () {
+        loadScript("js/plugin/bootstrapvalidator/bootstrapValidator.min.js", function () {
+            loadScript("js/plugin/jquery-step/jquery.steps.min.js", pagefunction)
+        });
+    });
+
+</script>

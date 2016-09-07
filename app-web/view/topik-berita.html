@@ -1,0 +1,463 @@
+<div class="row">
+    <div class="col-xs-12">
+        <h1 class="page-title txt-color-blueDark">
+            Menu
+            <i class="fa fa-angle-right fa-fw "></i>
+            <span><a href="#view/staging-questionnaire.html">Hasil Kuisioner Berita</a></span>
+        </h1>
+    </div>
+</div>
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+    <!-- row -->
+    <div class="row">
+        <!-- NEW WIDGET START -->
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="padding">
+                <legend style="border-bottom:1px solid #EEE;margin-bottom:20px;">Hasil Kuisioner Berita</legend>
+                <!-- widget div-->
+                <div style="border-width: 1px 1px 1px">
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <!-- end widget edit box -->
+                    <!--<input type='hidden' id='current_page'/>-->
+                    <!--<input type='hidden' id='show_per_page'/>-->
+                    <!-- widget content -->
+                    <div class="class_toolbar" style="height:50px;margin-bottom: 30px;">
+                        <div id="dt_basic_filter" class="dataTables_filter"
+                             style="background:#eee;padding:10px;border-radius:4px;">
+                            <div class="input-group search-news">
+                                <form class="form-horizontal staging-form" id="form_master_topic">
+                                    <div class="content controls form-group">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Nama Kuis<span>*</span></label>
+
+                                            <div class="col-sm-7 id-quiz">
+                                                <select style="margin: 10px 0;" class="form-control validate[required]"
+                                                        name="idQuiz" id="id_quiz"
+                                                        onchange="onComboBoxQuizChange()"
+                                                        placeholder="Nama Quiz">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Nama Topik<span>*</span></label>
+
+                                            <div class="col-sm-7 idParent">
+                                                <div class="id-topic">
+                                                    <select style="margin: 10px 0;"
+                                                            class="form-control validate[required]"
+                                                            name="idTopic" id="id_topics"
+                                                            onchange="onComboBoxTopicChange()"
+                                                            placeholder="Nama Topik">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /input-group -->
+                            <div class="dataTables_info" id="dt_basic_info" role="status" aria-live="polite"
+                                 style="float: right">Showing
+                                <span class="txt-color-darken start_item">1</span> to
+                                <span class="txt-color-darken end_item"></span> of
+                                <span class="text-primary total_item"></span> entries
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-body class_table">
+                    <form class="form-horizontal form_description ">
+                        <ul style="list-style-type:none; padding-left: 5px">
+                        </ul>
+                    </form>
+                    <div class="dataTables_paginate paging_simple_numbers text-center">
+                        <ul class="pagination pagination-sm paging">
+                        </ul>
+                        <br/>
+                    </div>
+                </div>
+                <div class="modal fade modal_penilaian_berita" tabindex="-1" role="dialog"
+                     aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">FORM PENILAIAN</h4>
+                            </div>
+                            <div class="modal-body clearfix">
+                                <div class="form-row">
+                                    <div class="col-md-8">
+                                        Mohon isikan alasan penilaian anda
+                                    </div>
+                                    <div class="col-md-12">
+                                        <textarea class="keterangan"
+                                                  style="width: 100%;background-color: #F1F1F1;border: #DDD"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-success simpan_keterangan" type="button" data-dismiss="modal">
+                                    Simpan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end widget content -->
+            </div>
+            <!-- end widget div -->
+            <!-- end widget -->
+        </article>
+        <!-- WIDGET END -->
+    </div>
+</section>
+
+<script type="text/javascript">
+    var startItem = 0;
+    var endItem = 0;
+    var portalNames = [];
+    var idQuiz;
+    var idTopic;
+    var quizName;
+    var topicName;
+
+    pageSetUp();
+
+    var pagefunction = function () {
+        initQuiz();
+        initTopic();
+        loadFilterPortalName();
+        buttonFilterClick();
+    };
+
+    function initQuiz() {
+        $selectQuiz = $('#id_quiz');
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            url: BASE_URL + "master/quizes",
+            dataType: "JSON",
+            type: "GET",
+            success: function (result) {
+                if (typeof(result) === "undefined" || result === null) {
+                    $select.html('<p>none available</p>');
+                    $(".id-quiz").removeClass('ajax_loader');
+                    return;
+                }
+
+                $selectQuiz.html('');
+                if ($.cookie('idQuiz') != null) {
+                    idQuiz = $.cookie('idQuiz');
+                    $selectQuiz.append('<option value="' + $.cookie('idQuiz') + '">' + $.cookie('quizName') + '</option>');
+                } else {
+                    $selectQuiz.append('<option value=""> -- Pilih Topik -- </option>');
+                }
+
+                $.each(result, function (key, val) {
+                    if (val.id !== $.cookie('idQuiz')) {
+                        $("#id_quiz option[value=" + val.id + "]").hide();
+                    }
+
+                    $selectQuiz.append('<option value="' + val.id + '">' + val.name + '</option>');
+                });
+
+                $(".id_quiz").removeClass('ajax_loader');
+            },
+            error: function () {
+                console.log('idQuiz');
+                $selectQuiz.html('<p>none available</p>');
+            }
+        });
+    }
+
+    function onComboBoxQuizChange() {
+        idQuiz = $("#id_quiz option:selected").val();
+        quizName = $("#id_quiz option:selected").text();
+        $.cookie('idQuiz', idQuiz);
+        $.cookie('quizName', quizName);
+
+        $idTopic = $('#id_topics');
+        $('.form_description ul').empty();
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            url: BASE_URL + "master/topics",
+            data: {
+                isParent: true,
+                idQuiz: idQuiz
+            },
+            dataType: "JSON",
+            type: "GET",
+            success: function (result) {
+                console.log("result", result);
+                if (typeof(result) === "undefined" || result === null) {
+                    $idTopic.html('<option value="">none available</option>');
+                    $(".id-topic").removeClass('ajax_loader');
+                    return;
+                }
+
+                $idTopic.html('');
+                $idTopic.append('<option value=""> -- Pilih Topik -- </option>');
+                $.each(result, function (key, val) {
+                    $idTopic.append('<option value="' + val.id + '">' + val.name + '</option>');
+                });
+
+                $(".id-topic").removeClass('ajax_loader');
+            },
+            error: function () {
+                console.log('topic');
+                $idTopic.html('<option value="">none available</option>');
+            }
+        });
+    }
+
+    function initTopic() {
+        idQuiz = $.cookie('idQuiz');
+        $selectTopics = $('#id_topics');
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            url: BASE_URL + "master/topics",
+            data: {
+                isParent: true,
+                idQuiz: idQuiz
+            },
+            dataType: "JSON",
+            type: "GET",
+            success: function (result) {
+                if (typeof(result) === "undefined" || result === null) {
+                    $selectTopics.html('<option value="">none available</option>');
+                    $(".id-topic").removeClass('ajax_loader');
+                    return;
+                }
+
+                $selectTopics.html('');
+                if ($.cookie('idTopic') != null) {
+                    idTopic = $.cookie('idTopic');
+                    $selectTopics.append('<option value="' + $.cookie('idTopic') + '">' + $.cookie('topicName') + '</option>');
+                } else {
+                    $selectTopics.append('<option value=""> -- Pilih Topik -- </option>');
+                }
+
+                $.each(result, function (key, val) {
+                    if (val.id !== $.cookie('idTopic')) {
+                        $("#id_topics option[value=" + val.id + "]").hide();
+                    }
+
+                    $selectTopics.append('<option value="' + val.id + '">' + val.name + '</option>');
+                });
+
+                $(".id-topic").removeClass('ajax_loader');
+                initData(idTopic);
+            },
+            error: function () {
+                console.log('topic');
+                $selectTopics.html('<option value="">none available</option>');
+            }
+        });
+    }
+
+    function onComboBoxTopicChange() {
+        idTopic = $("#id_topics option:selected").val();
+        topicName = $("#id_topics option:selected").text();
+        $.cookie('idTopic', idTopic);
+        $.cookie('topicName', topicName);
+        $('.form_description ul').empty();
+        initData(idTopic);
+    }
+
+    function initData(idTopic) {
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            type: "GET",
+            url: BASE_URL + 'transaction/rating/questionnaires?idTopic=' + idTopic + '&limit=0&offset=10',
+            success: function (result) {
+                var maxPage = result.rows;
+                $(".total_item").empty();
+                $(".total_item").append(maxPage);
+                $(".paging").paging(maxPage, {
+                    format: "[< ncnnn >]",
+                    perpage: 10,
+                    lapping: 0,
+                    page: $.cookie("currentPage") || 1,
+                    onSelect: function (page) {
+                        $(".start_item").empty();
+                        $(".end_item").empty();
+
+                        startItem = ((page - 1) * 10 ) + 1;
+                        endItem = ((page) * 10);
+                        if (endItem >= maxPage) {
+                            endItem = maxPage;
+                        }
+
+                        $(".start_item").append(startItem);
+                        $(".end_item").append(endItem);
+                        $.cookie("currentPage", page); //save current page to the cookie
+                        $.ajax({
+                            beforeSend: function (request) {
+                                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+                            },
+                            type: "GET",
+                            url: BASE_URL + 'transaction/rating/questionnaires?idTopic=' + idTopic + '&limit=' + (page - 1) * 10 + '&offset=10',
+                        }).done(function (result) {
+                            $('.form_description ul').empty();
+                            $(".class_table").show();
+                            $(".class_form_detail").hide();
+                            $(".form_content_detail").hide();
+                            $.each(result.data, function (i, value) {
+                                var date = new Date(Date.parse(value.publishDate));
+                                var formatted = formatDate(date);
+                                var detail = '<li class="media list-news"> ' +
+                                        '<div class="row">' +
+                                        '<div class="col-sm-8 col-md-10">' +
+                                        '<p><a href="#view/detail-topik-berita.html?id=' + value.id + '" class="btn_username_find username_find news-title">' + value.title + '</a>' +
+                                        '<a href="#view/detail-topik-berita.html" class="btn_username_find venueId hide">' + value.id + '</a>' +
+                                        '</p> ' +
+                                        '<p class="media-body"> ' +
+                                        '<div class="description-news">' + value.description +
+                                        '<span class="link-date-news">' + '<i class="fa fa-calendar-o"></i> ' + formatted + '</span>' +
+                                        '</div>' +
+                                        '</p>' +
+                                        '</div> ' +
+                                        '<div class="col-sm-4 col-md-2">' +
+                                        '<div class="link-source btn-xs btn-source pull-right" href="javascript:void(0);">' +
+                                        '<i class="fa fa-globe"></i>' + value.portal.name + '</div>' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</li>';
+                                $(".form_description ul").append(detail);
+                            });
+                        });
+                    },
+                    onFormat: function (type) {
+                        switch (type) {
+                            case 'next': // >
+                                if (this.active) {
+                                    return '<li class="next"><a href="#" id="next">Next <i class="fa fa-angle-right"></i></a></li>';
+                                }
+                                return '<li class="next disabled"><a href="javascript:void(0);" id="next">Next <i class="fa fa-angle-right"></i></a></li>';
+                            case 'prev': // <
+                                if (this.active) {
+                                    return '<li class="prev"><a href="#" id="prev"><i class="fa fa-angle-left"></i> Prev</a></li>';
+                                }
+                                return '<li class="prev disabled"><a href="javascript:void(0);" id="prev"><i class="fa fa-angle-left"></i> Prev</a></li>';
+                            case 'block':
+                                if (!this.active)
+                                    return '<li><a href="javascript:void(0);" class="disabled">' + this.value + '</a></li>';
+                                else if (this.value != this.page)
+                                    return '<li><a href="#">' + this.value + '</a></li>';
+                                return '<li><a href="javascript:void(0);" class="active">' + this.value + '</a></li>';
+                            case 'first':
+                                if (this.active)
+                                    return '<li class="first"><a href="#' + this.value + '" class="first"><i class="fa fa-angle-double-left"></i></a></li>';
+                                return '<li class="disabled"><a href="javascript:void(0);"><i class="fa fa-angle-double-left"></i></a></li>';
+                            case 'last':
+                                if (this.active)
+                                    return '<li class="last"><a href="#' + this.value + '" class="last"><i class="fa fa-angle-double-right"></i></a><li>';
+                                return '<li class="disabled"><a href="javascript:void(0);"><i class="fa fa-angle-double-right"></i></a></li>';
+                        }
+
+                        return ""; // return nothing for missing branches
+                    }
+                });
+                //scrolltop when click pagination
+                $('.paging').click(function () {
+                    $("html, body").animate({scrollTop: 0}, 300);
+                    return false;
+                });
+            }
+        });
+    }
+
+    function loadFilterPortalName() {
+        $filter = $('.filter_portal_name');
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            url: BASE_URL + "master/portals",
+            dataType: "JSON",
+            type: "GET",
+            success: function (data) {
+                if (typeof(data) === "undefined" || data === null) {
+                    $filter.html('<option value="">none available</option>');
+                    $(".filter_portal_name").removeClass('ajax_loader');
+                    return;
+                }
+
+                $filter.html('');
+                $.each(data, function (key, val) {
+                    var isChecked = false;
+                    if ($.cookie('portalNames') != undefined) {
+                        $.each(JSON.parse($.cookie('portalNames')), function (cookieKey, cookieVal) {
+                            //console.log(val.portalName, cookieVal);
+                            if (cookieVal == val.name) {
+                                isChecked = true;
+                                return;
+                            }
+                        })
+                    }
+
+                    var portalName = '<li> ' +
+                            '<a><input type="checkbox" class="portalName" id="portal-' + key + '" name=""  >' + val.name + '</a>' +
+                            '<a href="#view/detail-berita.html" class="btn_username_find portalId hide">' + val.name + '</a>' +
+                            '</li>';
+
+                    $filter.append(portalName);
+                    if (isChecked) {
+                        $("#portal-" + key).prop("checked", true);
+                    }
+                });
+
+                $(".filter_portal_name").removeClass('ajax_loader');
+                $('.portalName').click(function () {
+                    var $this = $(this);
+                    var portalName = $(this).closest("li").find(".portalId").html();
+                    if ($this.is(':checked')) {
+                        portalNames.push(portalName); //add item
+                    } else {
+                        portalNames.splice(portalNames.indexOf(portalName), 1); // remove item
+                    }
+                });
+            },
+            error: function () {
+                $filter.html('<option value="">none available</option>');
+            }
+        });
+    }
+
+    function buttonFilterClick() {
+        $('.btn_filter_portal_name').click(function () {
+            $.cookie("startDate", $("#datepickerStart").datepicker({dateFormat: 'yy-mm-dd'}).val());
+            $.cookie("endDate", $("#datepickerEnd").datepicker({dateFormat: 'yy-mm-dd'}).val());
+            $.cookie("portalNames", JSON.stringify(portalNames)); //save keyword to the cookie
+            $.cookie("idTopic", idTopic); //save idTopic to the cookie
+            $.cookie("currentPage", 1); //reset current pags
+            loadData();
+        });
+    }
+
+    loadScript("js/plugin/datatables/jquery.dataTables.min.js", function () {
+        loadScript("js/libs/paging/jquery-paging.js", function () {
+            loadScript("js/plugin/datatables/dataTables.colVis.min.js", function () {
+                loadScript("js/plugin/datatables/dataTables.tableTools.min.js", function () {
+                    loadScript("js/plugin/datatables/dataTables.bootstrap.min.js", function () {
+                        loadScript("js/plugin/datatable-responsive/datatables.responsive.min.js", pagefunction)
+                    });
+                });
+            });
+        });
+    });
+
+</script>
+

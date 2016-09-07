@@ -1,0 +1,515 @@
+<div class="row">
+    <div class="col-xs-12">
+        <h1 class="page-title txt-color-blueDark">
+            Menu
+            <i class="fa fa-angle-right fa-fw "></i>
+            <span><a href="#view/pencarian.html">Pencarian Artikel Berita</a></span>
+        </h1>
+    </div>
+</div>
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+    <!-- row -->
+    <div class="row">
+        <!-- NEW WIDGET START -->
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="padding">
+                <legend style="border-bottom:1px solid #EEE;margin-bottom:20px;">Pencarian Artikel Berita</legend>
+                <!-- widget div-->
+                <div style="border-width: 1px 1px 1px">
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <!-- end widget edit box -->
+                    <!--<input type='hidden' id='current_page'/>-->
+                    <!--<input type='hidden' id='show_per_page'/>-->
+                    <!-- widget content -->
+                    <div class="class_toolbar" style="height:50px;margin-bottom: 30px;">
+                        <div id="dt_basic_filter" class="dataTables_filter"
+                             style="background:#eee;padding:10px;border-radius:4px;">
+                            <div class="input-group search-news">
+                                <input type="search" class="form-control search_rss" id="search_rss"
+                                       aria-controls="dt_basic">
+                                <div class="input-group-btn">
+                                    <input type="text" id="datepickerStart" class="form-control form-date"
+                                           placeholder="Dari tanggal">
+                                </div>
+                                <div class="input-group-btn">
+                                    <input type="text" id="datepickerEnd" class="form-control form-date"
+                                           placeholder="Sampai tanggal">
+                                </div>
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-filter dropdown-toggle" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">Filter <span
+                                            class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right dropdown-filter filter_portal_name">
+                                    </ul>
+                                    <button type="submit" class="btn btn-primary btn_filter_portal_name"><span
+                                            class="glyphicon glyphicon-search"
+                                            aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                                <!-- /btn-group -->
+                            </div>
+                            <!-- /input-group -->
+                            <div class="dataTables_info" id="dt_basic_info" role="status" aria-live="polite"
+                                 style="float: right">Showing
+                                <span class="txt-color-darken start_item">1</span> to
+                                <span class="txt-color-darken end_item"></span> of
+                                <span class="text-primary total_item"></span> entries
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-body class_table">
+                    <form class="form-horizontal form_description ">
+                        <ul style="list-style-type:none; padding-left: 5px">
+                        </ul>
+                    </form>
+                    <div class="dataTables_paginate paging_simple_numbers text-center">
+                        <ul class="pagination pagination-sm paging">
+                        </ul>
+                        <br/>
+                    </div>
+                </div>
+                <div class="modal fade modal_penilaian_berita" tabindex="-1" role="dialog"
+                     aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">FORM PENILAIAN</h4>
+                            </div>
+                            <div class="modal-body clearfix">
+                                <div class="form-row">
+                                    <div class="col-md-8">
+                                        Mohon isikan alasan penilaian anda
+                                    </div>
+                                    <div class="col-md-12">
+                                        <textarea class="keterangan"
+                                                  style="width: 100%;background-color: #F1F1F1;border: #DDD"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-success simpan_keterangan" type="button" data-dismiss="modal">
+                                    Simpan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end widget content -->
+            </div>
+            <!-- end widget div -->
+            <!-- end widget -->
+        </article>
+        <!-- WIDGET END -->
+    </div>
+</section>
+
+<!-- MODAL TOPIK -->
+<div class="modal fade modalTopik" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Masukan ke topik</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="form_master_topic">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" style="
+                            text-align: left;
+                            font-size: 12px;
+                            padding-right: 0;">
+                            Nama Quiz<span>*</span>
+                        </label>
+                        <div class="col-sm-10 idQuizes">
+                            <select class="form-control validate[required]"
+                                    name="idQuizes" id="idQuizes"
+                                    onchange="onComboBoxQuizChange()"
+                                    placeholder="Nama Quiz">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" style="
+                            text-align: left;
+                            font-size: 12px;
+                            padding-right: 0;">
+                            Nama Topik<span>*</span>
+                        </label>
+                        <div class="col-sm-10 id-parent">
+                            <select style="margin: 10px 0;" class="form-control validate[required]"
+                                    name="idParent" id="id_parent"
+                                    onchange="onComboBoxTopikChange()"
+                                    placeholder="Nama Topik">
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var startItem = 0;
+    var endItem = 0;
+    var portalNames = [];
+    var idQuiz;
+    var idParent;
+
+    pageSetUp();
+
+    var pagefunction = function () {
+        scrolltop();
+        initQuiz();
+        initTopik();
+        initWidget();
+        loadData();
+        loadFilterPortalName();
+        keyPressSearch();
+        buttonFilterClick();
+    };
+
+    function initQuiz() {
+//        $select = $('#idQuizes');
+//        $.ajax({
+//            url: BASE_URL + "master/quizes",
+//            dataType: "JSON",
+//            type: "GET",
+//            success: function (result) {
+//                if (typeof(result) === "undefined" || result === null) {
+//                    $select.html('<p>none available</p>');
+//                    $(".idQuizes").removeClass('ajax_loader');
+//                    return;
+//                }
+//
+//                $select.html('');
+//                $.each(result, function (key, val) {
+//                    console.log("masuk sini", $select);
+//                    $select.append('<option value="' + val.id + '">' + val.name + '</option>');
+//                });
+//
+//                $(".idQuizes").removeClass('ajax_loader');
+//                idQuiz = result[0].id; //dapatkan role yang pertama
+//                console.log("load pertama", idQuiz);
+//            },
+//            error: function () {
+//                console.log('idQuiz');
+//                $select.html('<p>none available</p>');
+//            }
+//        });
+    }
+
+    function initTopik() {
+//        $select = $('#id_parent');
+//        $.ajax({
+//            url: BASE_URL + "master/topics",
+//            data: {isParent: true},
+//            dataType: "JSON",
+//            type: "GET",
+//            success: function (result) {
+//                if (typeof(result) === "undefined" || result === null) {
+//                    $select.html('<option value="">none available</option>');
+//                    $(".id-parent").removeClass('ajax_loader');
+//                    return;
+//                }
+//
+//                $select.html('');
+//                $.each(result, function (key, val) {
+//                    $select.append('<option value="' + val.id + ',' + val.quiz.id + '">' + val.name + '</option>');
+//                });
+//
+//                $(".id-parent").removeClass('ajax_loader');
+//                idParent = result[0].id; //dapatkan idParent yang pertama
+//                idQuiz = result[0].quiz.id; //dapatkan idQuiz dari parent yang pertama
+//            },
+//            error: function () {
+//                console.log('role');
+//                $select.html('<option value="">none available</option>');
+//            }
+//        });
+    }
+
+    function onComboBoxTopikChange() {
+        var optionValue = $("#id-parent option:selected").val().split(",");
+        idParent = optionValue[0];
+        idQuiz = optionValue[1];
+    }
+
+
+    function initWidget() {
+        $("#datepickerStart").datepicker({
+            numberOfMonths: 1,
+            showButtonPanel: true,
+            dateFormat: 'yy-mm-dd'
+        });
+
+        $('#datepickerStart').datepicker('setDate', $.cookie('startDate'));
+
+        $("#datepickerEnd").datepicker({
+            numberOfMonths: 1,
+            showButtonPanel: true,
+            dateFormat: 'yy-mm-dd'
+        });
+
+        $('#datepickerEnd').datepicker('setDate', $.cookie('endDate'));
+    }
+
+    function loadData() {
+        var searchUrl = "";
+        var portalName = undefined;
+        var startDate = $.cookie('startDate');
+        var endDate = $.cookie('endDate');
+        var keyword = $.cookie('keyword');
+        if (keyword === null || keyword === '' || keyword == '*.*' || keyword == undefined) {
+            keyword = '*.*';
+            $(".search_rss").empty();
+            $(".search_rss").attr('placeholder', 'Masukkan kata kunci');
+            searchUrl = SOLR_URL + 'rss/select?q=' + keyword + '';
+        } else {
+            $(".search_rss").val(keyword);
+            searchUrl = SOLR_URL + 'rss/select?q="' + keyword + '"';
+        }
+
+        console.log($.cookie('portalNames')+ " "+endDate);
+
+
+        if ($.cookie('portalNames') != undefined) { //cek apakah portal name sudah dipilih sebelumnya
+            portalName = JSON.parse($.cookie('portalNames')).join(" OR ", "");
+            portalNames = JSON.parse($.cookie('portalNames'));
+        }
+
+        if (portalName === null || portalName === '' || portalName == '*.*' || portalName == undefined) {
+            portalName = '*.*';
+            searchUrl += '&fq=' + portalName + '';
+        } else {
+            portalName = 'portalName:' + portalName + '';
+            searchUrl += '&fq=' + portalName + '';
+        }
+
+        if (startDate != undefined && endDate != undefined && startDate != '' && endDate != '') {
+            searchUrl += '&fq=publishDate:[' + startDate + 'T00:00:00Z TO ' + endDate + 'T24:00:00Z]';
+        }
+
+        $.ajax({
+            url: searchUrl + "&rows=0&wt=json&indent=true&omitHeader=true", //count all items
+            method: 'GET',
+            dataType: "jsonp",
+            jsonp: "json.wrf",
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            crossDomain: true,
+            //header: "Access-Control-Allow-Origin: http://yourdomain-you-are-connecting-from.com",
+            success: function (data) {
+                var maxPage = data.response.numFound;
+                $(".total_item").empty();
+                $(".total_item").append(maxPage);
+                $(".paging").paging(maxPage, {
+                    format: "[< ncnnn >]",
+                    perpage: 10,
+                    lapping: 0,
+                    page: $.cookie("currentPage") || 1,
+                    onSelect: function (page) {
+                        $(".start_item").empty();
+                        $(".end_item").empty();
+
+                        startItem = ((page - 1) * 10 ) + 1;
+                        endItem = ((page) * 10);
+                        if (endItem >= maxPage) {
+                            endItem = maxPage;
+                        }
+
+                        $(".start_item").append(startItem);
+                        $(".end_item").append(endItem);
+                        $.cookie("currentPage", page); //save current page to the cookie
+                        $.ajax({
+                            url: searchUrl + "&start=" + (page - 1) * 10 + "&rows=10&sort=publishDate+desc&wt=json",
+                            method: 'GET',
+                            dataType: "jsonp",
+                            jsonp: "json.wrf",
+                            type: "GET",
+                            contentType: "application/json; charset=utf-8",
+                            crossDomain: true,
+                            //header: "Access-Control-Allow-Origin: http://yourdomain-you-are-connecting-from.com",
+                        }).done(function (data) {
+                            $('.form_description ul').empty();
+                            $(".class_table").show();
+                            $(".class_form_detail").hide();
+                            $(".form_content_detail").hide();
+                            $.each(data.response.docs, function (i, value) {
+                                var date = new Date(Date.parse(value.publishDate));
+                                var formatted = formatDate(date);
+                                var detail = '<li class="media list-news"> ' +
+                                        '<div class="row">' +
+                                        '<div class="col-sm-8 col-md-10">' +
+                                        '<p><a href="#view/detail-berita.html?id=' + value.id + '" class="btn_username_find username_find news-title">' + value.title + '</a>' +
+                                        '<a href="#view/detail-berita.html" class="btn_username_find venueId hide">' + value.id + '</a>' +
+                                        '</p> ' +
+                                        '<p class="media-body"> ' +
+                                        '<div class="description-news">' + value.description +
+                                        '<span class="link-date-news">' + '<i class="fa fa-calendar-o"></i> ' + formatted + '</span>' +
+                                        '</div>' +
+                                        '</p>' +
+                                        '</div> ' +
+                                        '<div class="col-sm-4 col-md-2">' +
+                                        '<div class="link-source btn-xs btn-source pull-right" href="javascript:void(0);">' +
+                                        '<i class="fa fa-globe"></i>' + value.portalName + '</div>' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</li>';
+                                $(".form_description ul").append(detail);
+                            });
+                        });
+                    },
+                    onFormat: function (type) {
+                        switch (type) {
+                            case 'next': // >
+                                if (this.active) {
+                                    return '<li class="next"><a href="#" id="next">Next <i class="fa fa-angle-right"></i></a></li>';
+                                }
+                                return '<li class="next disabled"><a href="javascript:void(0);" id="next">Next <i class="fa fa-angle-right"></i></a></li>';
+                            case 'prev': // <
+                                if (this.active) {
+                                    return '<li class="prev"><a href="#" id="prev"><i class="fa fa-angle-left"></i> Prev</a></li>';
+                                }
+                                return '<li class="prev disabled"><a href="javascript:void(0);" id="prev"><i class="fa fa-angle-left"></i> Prev</a></li>';
+                            case 'block':
+                                if (!this.active)
+                                    return '<li><a href="javascript:void(0);" class="disabled">' + this.value + '</a></li>';
+                                else if (this.value != this.page)
+                                    return '<li><a href="#">' + this.value + '</a></li>';
+                                return '<li><a href="javascript:void(0);" class="active">' + this.value + '</a></li>';
+                            case 'first':
+                                if (this.active)
+                                    return '<li class="first"><a href="#' + this.value + '" class="first"><i class="fa fa-angle-double-left"></i></a></li>';
+                                return '<li class="disabled"><a href="javascript:void(0);"><i class="fa fa-angle-double-left"></i></a></li>';
+                            case 'last':
+                                if (this.active)
+                                    return '<li class="last"><a href="#' + this.value + '" class="last"><i class="fa fa-angle-double-right"></i></a><li>';
+                                return '<li class="disabled"><a href="javascript:void(0);"><i class="fa fa-angle-double-right"></i></a></li>';
+                        }
+
+                        return ""; // return nothing for missing branches
+                    }
+                });
+                //scrolltop when click pagination
+                $('.paging').click(function () {
+                    $("html, body").animate({scrollTop: 0}, 300);
+                    return false;
+                });
+            }
+        });
+    }
+
+    function keyPressSearch() {
+        $('#search_rss').keypress(function (event) {
+                    var keycode = (event.keyCode ? event.keyCode : event.which);
+                    if (keycode == '13') {
+                        var keyword = $(".search_rss").val().trim();
+                        if (keyword === null || keyword === '' || keyword == '*.*' || keyword == undefined) {
+                            keyword = "*.*";
+                            $(".search_rss").empty();
+                            $(".search_rss").attr('placeholder', 'Masukkan kata kunci');
+                        } else {
+                            $(".search_rss").val(keyword);
+                        }
+
+                        $.cookie("currentPage", 1); //reset current page
+                        $.cookie("keyword", keyword); //save keyword to the cookie
+                        loadData();
+                    }
+                }
+        );
+    }
+
+    function loadFilterPortalName() {
+        $filter = $('.filter_portal_name');
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            url: BASE_URL + "master/portals",
+            dataType: "JSON",
+            type: "GET",
+            success: function (data) {
+                if (typeof(data) === "undefined" || data === null) {
+                    $filter.html('<option value="">none available</option>');
+                    $(".filter_portal_name").removeClass('ajax_loader');
+                    return;
+                }
+
+                $filter.html('');
+                $.each(data, function (key, val) {
+                    var isChecked = false;
+                    if ($.cookie('portalNames') != undefined) {
+                        $.each(JSON.parse($.cookie('portalNames')), function (cookieKey, cookieVal) {
+                            //console.log(val.portalName, cookieVal);
+                            if (cookieVal == val.name) {
+                                isChecked = true;
+                                return;
+                            }
+                        })
+                    }
+
+                    var portalName = '<li> ' +
+                            '<a><input type="checkbox" class="portalName" id="portal-' + key + '" name=""  >' + val.name + '</a>' +
+                            '<a href="#view/detail-berita.html" class="btn_username_find portalId hide">' + val.name + '</a>' +
+                            '</li>';
+
+                    $filter.append(portalName);
+                    if (isChecked) {
+                        $("#portal-" + key).prop("checked", true);
+                    }
+                });
+
+                $(".filter_portal_name").removeClass('ajax_loader');
+                $('.portalName').click(function () {
+                    var $this = $(this);
+                    var portalName = $(this).closest("li").find(".portalId").html();
+                    if ($this.is(':checked')) {
+                        portalNames.push(portalName); //add item
+                    } else {
+                        portalNames.splice(portalNames.indexOf(portalName), 1); // remove item
+                    }
+                });
+            },
+            error: function () {
+                $filter.html('<option value="">none available</option>');
+            }
+        });
+    }
+
+    function buttonFilterClick() {
+        $('.btn_filter_portal_name').click(function () {
+            $.cookie("startDate", $("#datepickerStart").datepicker({dateFormat: 'yy-mm-dd'}).val());
+            $.cookie("endDate", $("#datepickerEnd").datepicker({dateFormat: 'yy-mm-dd'}).val());
+            $.cookie("portalNames", JSON.stringify(portalNames)); //save keyword to the cookie
+            $.cookie("currentPage", 1); //reset current pags
+            loadData();
+        });
+    }
+
+    loadScript("js/plugin/datatables/jquery.dataTables.min.js", function () {
+        loadScript("js/libs/paging/jquery-paging.js", function () {
+            loadScript("js/plugin/datatables/dataTables.colVis.min.js", function () {
+                loadScript("js/plugin/datatables/dataTables.tableTools.min.js", function () {
+                    loadScript("js/plugin/datatables/dataTables.bootstrap.min.js", function () {
+                        loadScript("js/plugin/datatable-responsive/datatables.responsive.min.js", pagefunction)
+                    });
+                });
+            });
+        });
+    });
+
+</script>
+

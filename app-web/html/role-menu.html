@@ -1,0 +1,502 @@
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            Setting
+            <i class="fa fa-angle-right fa-fw "></i>
+            <span><a href="#view/hak-akses.html">Hak Akses</a></span>
+        </h1>
+    </div>
+
+    <div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
+        <ul id="sparks" class="">
+            <li class="sparks-info">
+                <h5> My Income <span class="txt-color-blue">$47,171</span></h5>
+
+                <div class="sparkline txt-color-blue hidden-mobile hidden-md hidden-sm">
+                    1300, 1877, 2500, 2577, 2000, 2100, 3000, 2700, 3631, 2471, 2700, 3631, 2471
+                </div>
+            </li>
+            <li class="sparks-info">
+                <h5> Site Traffic <span class="txt-color-purple"><i class="fa fa-arrow-circle-up"
+                                                                    data-rel="bootstrap-tooltip" title="Increased"></i>&nbsp;45%</span>
+                </h5>
+
+                <div class="sparkline txt-color-purple hidden-mobile hidden-md hidden-sm">
+                    110,150,300,130,400,240,220,310,220,300, 270, 210
+                </div>
+            </li>
+            <li class="sparks-info">
+                <h5> Site Orders <span class="txt-color-greenDark"><i class="fa fa-shopping-cart"></i>&nbsp;2447</span>
+                </h5>
+
+                <div class="sparkline txt-color-greenDark hidden-mobile hidden-md hidden-sm">
+                    110,150,300,130,400,240,220,310,220,300, 270, 210
+                </div>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+<section id="widget-grid" class="">
+    <div class="row">
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0"
+                 data-widget-colorbutton="false"
+                 data-widget-editbutton="false"
+                 data-widget-togglebutton="false"
+                 data-widget-deletebutton="false"
+                 data-widget-fullscreenbutton="false">
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+
+                    <h2>Hak Akses</h2>
+                </header>
+
+                <div>
+                    <div class="jarviswidget-editbox">
+                    </div>
+
+                    <div class="widget-body no-padding">
+                        <div class="form-row">
+                            <div class="col-md-3" style="float: right; padding: 5px 10px">
+                                <select class="form-control validate[required]" name="role" id="role"
+                                        onchange="onComboBoxRoleChange()"
+                                        placeholder="role">
+                                </select>
+                            </div>
+                        </div>
+
+                        <table id="dt_hak_akses" class="table table-striped table-bordered table-hover" width="100%">
+                            <thead>
+                            <tr>
+                                <td align="center" rowspan="1" colspan="1" width="500px"></td>
+                                <td align="center" rowspan="1" colspan="5">ADMIN</td>
+                            </tr>
+                            <tr>
+                                <td align="center" width="500px">MENU</td>
+                                <td align="center" width="92px">read</td>
+                                <td align="center" width="92px">save</td>
+                                <td align="center" width="92px">edit</td>
+                                <td align="center" width="92px">delete</td>
+                                <td align="center" width="92px">print</td>
+                            </tr>
+                            </thead>
+                            <tbody data-page-length='10'>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="widget-body class_form">
+                <form class="form-horizontal form_content "></form>
+
+                <div class="hidden-xs">
+                    <footer>
+                        <button type="submit" class="btn btn-primary btnSubmit" style="float:right;margin-top:-20px;">
+                            <i></i> Simpan
+                        </button>
+                    </footer>
+                </div>
+            </div>
+        </article>
+    </div>
+
+</section>
+
+<script type="text/javascript">
+    var dataTable; //declare data table
+    var menuList = [];
+    var menuChilds = [];
+    var idRole;
+    pageSetUp();
+    var pagefunction = function () {
+        initData();
+        buttonSaveHakAkses()
+    };
+
+    /*
+     Init data role terlebih dahulu, kemudian init data hak akses berdasarkan role yang paling atas
+     */
+    function initData() {
+        $select = $('#role');
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            url: BASE_URL + "roles",
+            dataType: "JSON",
+            type: "GET",
+            success: function (result) {
+                if (typeof(result) === "undefined" || result === null) {
+                    $select.html('<option value="">none available</option>');
+                    $(".role").removeClass('ajax_loader');
+                    return;
+                }
+
+                $select.html('');
+                $.each(result.data, function (key, val) {
+                    $select.append('<option value="' + val.id + '">' + val.roleLevel + '</option>');
+                });
+
+                $(".role").removeClass('ajax_loader');
+
+                idRole = result.data[0].id; //dapatkan role yang pertama
+//                roles.push(idRole);
+                $.getJSON(BASE_URL + "menu/role", {
+                    id: idRole
+                }, function (json) {
+                    if (json != null) {
+                        initDataMenu(json);
+                        menuChilds.splice(0, 1)
+                    }
+                });
+            },
+            error: function () {
+                console.log('role');
+                $select.html('<option value="">none available</option>');
+            }
+        });
+    }
+
+    function onComboBoxRoleChange() {
+        idRole = $("#role option:selected").val();
+        console.log("onComboBoxRoleChange ", idRole);
+        $.getJSON(BASE_URL + "menu/role", {
+            id: idRole
+        }, function (json) {
+            if (json != null) {
+                initDataMenu(json);
+                menuChilds.splice(0, 1)
+//                console.log("menuTemp", menuChilds.splice(0, 1));
+            }
+        });
+    }
+
+    function initDataMenu(json) {
+        var isTableFirst = false;
+        var parentMenu = [];
+        var childMenu = [];
+        var resultData = $.each(json, function (index, value) {
+            console.log("resultData ", idRole);
+            var name = value.name;
+            var canRead = value.roleMenu.canRead;
+            var canSave = value.roleMenu.canSave;
+            var canEdit = value.roleMenu.canEdit;
+            var canDelete = value.roleMenu.canDelete;
+            var canPrint = value.roleMenu.canPrint;
+            var orderNumber = value.orderNumber;
+            var idParent = value.idParent;
+            var id = value.id;
+            var urutan = value.roleMenu.id;
+            var child = value.id;
+//            if (value.idParent == 0) {
+            parentMenu.push({
+                "name": name,
+                "canRead": canRead,
+                "canSave": canSave,
+                "canEdit": canEdit,
+                "canDelete": canDelete,
+                "canPrint": canPrint,
+                "orderNumber": orderNumber,
+                "idParent": idParent,
+                "id": id,
+                "urutan": urutan,
+                "child": childMenu,
+                "role": idRole
+            });
+//            }
+        });
+
+        $.each(parentMenu, function (index, parentValue) {
+            $.each(resultData, function (index, childValue) {
+                console.log("parentMenu", parentValue.role);
+                var name = childValue.name;
+                var canRead = childValue.roleMenu.canRead;
+                var canSave = childValue.roleMenu.canSave;
+                var canEdit = childValue.roleMenu.canEdit;
+                var canDelete = childValue.roleMenu.canDelete;
+                var canPrint = childValue.roleMenu.canPrint;
+                var orderNumber = childValue.orderNumber;
+                var idParent = childValue.idParent;
+                var urutan = childValue.roleMenu.id;
+                var id = childValue.id;
+                if (parentValue.id == childValue.idParent && childValue.idParent != 0) {
+                    childMenu.push({
+                        "name": name,
+                        "canRead": canRead,
+                        "canSave": canSave,
+                        "canEdit": canEdit,
+                        "canDelete": canDelete,
+                        "canPrint": canPrint,
+                        "orderNumber": orderNumber,
+                        "idParent": idParent,
+                        "urutan": urutan,
+                        "id": id,
+                        "role": parentValue.role
+                    });
+                }
+            });
+        });
+
+        try {
+            dataTable.fnDestroy();
+            isTableFirst = false;
+        } catch (err) {
+            isTableFirst = true;
+        }
+
+        dataTable = $('#dt_hak_akses').dataTable({
+            "bSort": false,
+            "searching": false,
+            "retrieve": true,
+            "lengthChange": false,
+            "paging": false,
+            "bDestroy": true,
+            "bInfo": false,
+            "aoColumnDefs": [
+                {
+                    "aTargets": [1], // Column to target
+                    "className": "dt-center",
+                    "mRender": function (data, type, full) {
+                        return '<input type="checkbox" name="id[]" value="'
+                                + $('<div/>').text(data).html() + '">';
+                    }
+                }
+            ],
+            "data": parentMenu,
+            "columns": [
+                {
+                    "data": "name",
+                    "className": 'details-control',
+                    "orderable": false,
+                    "defaultContent": ""
+                },
+                {"data": "", "defaultContent": ""},
+                {"data": "", "defaultContent": ""},
+                {"data": "", "defaultContent": ""},
+                {"data": "", "defaultContent": ""},
+                {"data": "", "defaultContent": ""}
+            ],
+            "rowCallback": function (row, data, dataIndex) {
+                var canRead = data.canRead;
+                if (canRead) {
+                    $(row).find('input[type="checkbox"]').prop('checked', true);
+                    $(row).addClass('selected');
+                } else {
+                    $(row).find('input[type="checkbox"]').prop('checked', false);
+                    $(row).addClass('selected');
+                }
+            }
+        });
+
+        // Add event listener for opening and closing details
+        $('#dt_hak_akses tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = $('#dt_hak_akses').DataTable().row(tr);
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                // Open this row
+                row.child(childDataMenu(row.data())).show();
+                tr.addClass('shown');
+                //disable listener untuk checkbox pada data child
+                //scrpit dibawah ini untuk mengnatisipasi multi listener pada checkbox
+                try {
+                    $(this).closest('table').off('click', 'input[type="checkbox"]');
+                } catch (e) {
+                    console.log('error disable listener');
+                }
+
+                //add listener untuk checkbox pada data child
+                $(this).closest('table').on('click', 'input[type="checkbox"]', function (e) {
+                    var uniqId = $(this).attr('data-id') + '-' + $(this).attr('data-name');
+                    if ($(this).attr('name') === 'canRead') {
+                        var canRead = false;
+                        canRead = !!this.checked;
+                        //script ini untuk mengupdate nilai status can Read
+                        menuList = updateObjParamInArrObject(menuList, uniqId, 'uniqId', 'canRead', canRead);
+                    }
+
+                    if ($(this).attr('name') === 'canSave') {
+                        var canSave = false;
+                        canSave = !!this.checked;
+                        //script ini untuk mengupdate nilai status can Save
+                        menuList = updateObjParamInArrObject(menuList, uniqId, 'uniqId', 'canSave', canSave);
+                    }
+
+                    if ($(this).attr('name') === 'canEdit') {
+                        var canEdit = false;
+                        canEdit = !!this.checked;
+                        //script ini untuk mengupdate nilai status can Edit
+                        menuList = updateObjParamInArrObject(menuList, uniqId, 'uniqId', 'canEdit', canEdit);
+                    }
+
+                    if ($(this).attr('name') === 'canDelete') {
+                        var canDelete = false;
+                        canDelete = !!this.checked;
+                        //script ini untuk mengupdate nilai status can Delete
+                        menuList = updateObjParamInArrObject(menuList, uniqId, 'uniqId', 'canDelete', canDelete);
+                    }
+
+                    if ($(this).attr('name') === 'canPrint') {
+                        var canPrint = false;
+                        canPrint = !!this.checked;
+                        //script ini untuk mengupdate nilai status can Print
+                        menuList = updateObjParamInArrObject(menuList, uniqId, 'uniqId', 'canPrint', canPrint);
+                    }
+                });
+            }
+        });
+
+//        $.each(parentMenu, function (index, dataMenu) {
+//            $.each(dataMenu.child, function (index, menu) {
+//                if (dataMenu.id === menu.idParent && menu.idParent != 0) {
+//                    var uniqId = menu.id + '-' + menu.name;
+//                    var menuTemp = {
+//                        uniqId: uniqId,
+//                        id: menu.id,
+//                        urutan: menu.urutan,
+//                        name: menu.name,
+//                        idParent: menu.idParent,
+//                        canRead: menu.canRead,
+//                        canSave: menu.canSave,
+//                        canEdit: menu.canEdit,
+//                        canDelete: menu.canDelete,
+//                        canPrint: menu.canPrint,
+//                        idRole: dataMenu.role
+//                    };
+//
+//                    if ($.inArray(menu, menuTemp) == -1) { //check if id value not exits than add it
+//                        menuList.push(menu); //put object in collection to access it's all values
+//                    }
+//                }
+//            })
+//        });
+//        console.log("menuTemp", menuList);
+
+        $.each(parentMenu, function (index, dataMenu) {
+            if ($.inArray(dataMenu.child, menuChilds) == -1) { //check if id value not exits than add it
+                menuChilds.push(dataMenu.child); //put object in collection to access it's all values
+            }
+        });
+
+        $.each(menuChilds, function (index, menu) {
+//            if (dataMenu.id === menu.idParent && menu.idParent != 0) {
+            var uniqId = menu.id + '-' + menu.name;
+            var menuTemp = {
+                uniqId: uniqId,
+                id: menu.id,
+                urutan: menu.urutan,
+                name: menu.name,
+                idParent: menu.idParent,
+                canRead: menu.canRead,
+                canSave: menu.canSave,
+                canEdit: menu.canEdit,
+                canDelete: menu.canDelete,
+                canPrint: menu.canPrint,
+                idRole: menu.role
+            };
+
+            if ($.inArray(menu, menuList) == -1) { //check if id value not exits than add it
+                menuList.push(menu); //put object in collection to access it's all values
+            }
+//            }
+        });
+        console.log("menuTemp", menuList);
+
+        $("#dt_hak_akses").DataTable().rows().every(function () {
+            this.child(childDataMenu(this.data())).show();
+            this.nodes().to$().addClass('shown');
+        });
+    }
+
+    function childDataMenu(data) {
+        var ret_value = "";
+        ret_value = "<table class='table table-striped table-bordered table-hover' id='tb_detail_menu' border='0' style='width:100%; padding-right:50px;' >";
+        ret_value += "<tbody>";
+        $.each(data.child, function (i, val) {
+            if (data.id === val.idParent) {
+                var uniqId = val.id + '-' + val.name;
+                var tmpMenu = getObjInArrObject(menuList, uniqId, 'uniqId');
+
+                var tmpHakAksesRead = val.canRead;
+
+                var tmpHakAksesSave = val.canSave;
+
+                var tmpHakAksesEdit = val.canEdit;
+
+                var tmpHakAksesDelete = val.canDelete;
+
+                var tmpHakAksesPrint = val.canPrint;
+
+                ret_value += '</tr>' +
+                        '<td style="text-align:left; width: 685px">' + val.name + '</td>';
+                if (tmpHakAksesRead === true || tmpMenu === true) {
+                    ret_value += '<td style="text-align:center; width: 127px"><input type="checkbox" data-id="' + val.id + '" data-name="' + val.name + '" value ="' + true + '" name="canRead" style="text-align:center; vertical-align: middle;" checked></td>';
+                } else {
+                    ret_value += '<td style="text-align:center; width: 127px"><input type="checkbox" data-id="' + val.id + '" data-name="' + val.name + '" value ="' + false + '" name="canRead" style="text-align:center; vertical-align: middle;"></td>';
+                }
+
+                if (tmpHakAksesSave === true || tmpMenu === true) {
+                    ret_value += '<td style="text-align:center; width: 127px"><input type="checkbox" data-id="' + val.id + '" data-name="' + val.name + '" value ="' + true + '" name="canSave" style="text-align:center; vertical-align: middle;" checked></td>';
+                } else {
+                    ret_value += '<td style="text-align:center; width: 127px"><input type="checkbox" data-id="' + val.id + '" data-name="' + val.name + '" value ="' + false + '" name="canSave" style="text-align:center; vertical-align: middle;"></td>';
+                }
+
+                if (tmpHakAksesEdit === true || tmpMenu === true) {
+                    ret_value += '<td style="text-align:center; width: 127px"><input type="checkbox" data-id="' + val.id + '" data-name="' + val.name + '" value ="' + true + '" name="canEdit" style="text-align:center; vertical-align: middle;" checked></td>';
+                } else {
+                    ret_value += '<td style="text-align:center; width: 127px"><input type="checkbox" data-id="' + val.id + '" data-name="' + val.name + '" value ="' + false + '" name="canEdit" style="text-align:center; vertical-align: middle;"></td>';
+                }
+
+                if (tmpHakAksesDelete === true || tmpMenu === true) {
+                    ret_value += '<td style="text-align:center; width: 127px"><input type="checkbox" data-id="' + val.id + '" data-name="' + val.name + '" value ="' + true + '" name="canDelete" style="text-align:center; vertical-align: middle;" checked></td>';
+                } else {
+                    ret_value += '<td style="text-align:center; width: 127px"><input type="checkbox" data-id="' + val.id + '" data-name="' + val.name + '" value ="' + false + '" name="canDelete" style="text-align:center; vertical-align: middle;"></td>';
+                }
+
+                if (tmpHakAksesPrint === true || tmpMenu === true) {
+                    ret_value += '<td style="text-align:center; width: 127px"><input type="checkbox" data-id="' + val.id + '" data-name="' + val.name + '" value ="' + true + '" name="canPrint" style="text-align:center; vertical-align: middle;" checked></td>';
+                } else {
+                    ret_value += '<td style="text-align:center; width: 127px"><input type="checkbox" data-id="' + val.id + '" data-name="' + val.name + '" value ="' + false + '" name="canPrint" style="text-align:center; vertical-align: middle;"></td>';
+                }
+            }
+        });
+
+        ret_value += "</tbody></table>";
+        return ret_value;
+    }
+
+    function buttonSaveHakAkses() {
+        $(".btnSubmit").button().click(function () {
+                    params = menuList;
+                    console.log("menuList", params);
+//                    $.ajax({
+//                        type: "POST",
+//                        contentType: "application/json",
+//                        url: BASE_URL + "role/menu",
+//                        data: JSON.stringify(params),
+//                        success: function (response) {
+//                            params = null;
+//                            console.log(response);
+//                            initData();
+//                        }
+//                    });
+                }
+        );
+    }
+
+    loadScript("js/plugin/datatables/jquery.dataTables.min.js", function () {
+        loadScript("js/plugin/datatables/dataTables.colVis.min.js", function () {
+            loadScript("js/plugin/datatables/dataTables.tableTools.min.js", function () {
+                loadScript("js/plugin/datatables/dataTables.bootstrap.min.js", function () {
+                    loadScript("js/plugin/datatable-responsive/datatables.responsive.min.js", pagefunction)
+                });
+            });
+        });
+    });
+
+</script>

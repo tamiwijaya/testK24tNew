@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <title>Greenlabs Apps</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- #CSS Links -->
+    <!-- Basic Styles -->
+    <!-- <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
+
+    <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production-plugins.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.min.css">
+
+    <!-- DEV links : turn this on when you like to develop directly -->
+    <!--<link rel="stylesheet" type="text/css" media="screen" href="../Source_UNMINIFIED_CSS/smartadmin-production.css">-->
+    <!--<link rel="stylesheet" type="text/css" media="screen" href="../Source_UNMINIFIED_CSS/smartadmin-skins.css">-->
+
+    <!-- SmartAdmin RTL Support -->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-rtl.min.css">
+
+    <!-- We recommend you use "app.css" to override SmartAdmin
+         specific styles this will also ensure you retrain your customization with each SmartAdmin update.
+    <link rel="stylesheet" type="text/css" media="screen" href="css/app.css"> -->
+
+    <!-- treegrid plugin-->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/jquery.treegrid.css">
+
+    <!-- treegrid plugin-->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/jquery.steps.min.css">
+
+    <!-- Demo purpose only: goes with demo.js, you can delete this css when designing your own WebApp -->
+    <!--<link rel="stylesheet" type="text/css" media="screen" href="css/demo.min.css">-->
+    <!-- for dev mode we use unminfied css cause the pattern still not clear yet -->
+    <link rel="stylesheet" type="text/css" media="screen" href="source/css/demo.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="source/css/app.css">
+    <!--<link rel="stylesheet" type="text/css" media="screen" href="css/app.min.css">-->
+
+    <!-- #FAVICONS -->
+    <link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="img/favicon/favicon.ico" type="image/x-icon">
+
+    <!-- #GOOGLE FONT -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+
+    <!-- #APP SCREEN / ICONS -->
+    <!-- Specifying a Webpage Icon for Web Clip
+         Ref: https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+    <link rel="apple-touch-icon" href="img/splash/sptouch-icon-iphone.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="img/splash/touch-icon-ipad.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="img/splash/touch-icon-iphone-retina.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="img/splash/touch-icon-ipad-retina.png">
+
+    <!-- metrial icon -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!-- Startup image for web apps -->
+    <!--<link rel="apple-touch-startup-image" href="img/splash/ipad-landscape.png"-->
+    <!--media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">-->
+    <!--<link rel="apple-touch-startup-image" href="img/splash/ipad-portrait.png"-->
+    <!--media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">-->
+    <!--<link rel="apple-touch-startup-image" href="img/splash/iphone.png" media="screen and (max-device-width: 320px)">-->
+</head>
+
+<!--
+
+TABLE OF CONTENTS.
+
+Use search to find needed section.
+
+===================================================================
+
+|  01. #CSS Links                |  all CSS links and file paths  |
+|  02. #FAVICONS                 |  Favicon links and file paths  |
+|  03. #GOOGLE FONT              |  Google font link              |
+|  04. #APP SCREEN / ICONS       |  app icons, screen backdrops   |
+|  05. #BODY                     |  body tag                      |
+|  06. #HEADER                   |  header tag                    |
+|  07. #PROJECTS                 |  project lists                 |
+|  08. #TOGGLE LAYOUT BUTTONS    |  layout buttons and actions    |
+|  09. #MOBILE                   |  mobile view dropdown          |
+|  10. #SEARCH                   |  search field                  |
+|  11. #NAVIGATION               |  left panel & navigation       |
+|  12. #MAIN PANEL               |  main panel                    |
+|  13. #MAIN CONTENT             |  content holder                |
+|  14. #PAGE FOOTER              |  page footer                   |
+|  15. #SHORTCUT AREA            |  dropdown shortcuts area       |
+|  16. #PLUGINS                  |  all scripts and plugins       |
+
+===================================================================
+
+-->
+
+<!-- #BODY -->
+<!-- Possible Classes
+
+    * 'smart-style-{SKIN#}'
+    * 'smart-rtl'         - Switch theme mode to RTL
+    * 'menu-on-top'       - Switch to top navigation (no DOM change required)
+    * 'no-menu'			  - Hides the menu completely
+    * 'hidden-menu'       - Hides the main menu but still accessable by hovering over left edge
+    * 'fixed-header'      - Fixes the header
+    * 'fixed-navigation'  - Fixes the main menu
+    * 'fixed-ribbon'      - Fixes breadcrumb
+    * 'fixed-page-footer' - Fixes footer
+    * 'container'         - boxed layout mode (non-responsive: will not work with fixed-navigation & fixed-ribbon)
+-->
+<body class="smart-style-0 fixed-navigation">
+
+<!-- #HEADER -->
+<header id="header-none">
+    <!--<div id="logo-group">-->
+    <!--&lt;!&ndash; PLACE YOUR LOGO HERE &ndash;&gt;-->
+    <!--<span id="logo"> <img src="img/logo.png" alt="SmartAdmin"> </span>-->
+    <!--&lt;!&ndash; END LOGO PLACEHOLDER &ndash;&gt;-->
+    <!--</div>-->
+    <!--&lt;!&ndash; #TOGGLE LAYOUT BUTTONS &ndash;&gt;-->
+    <!--&lt;!&ndash; pulled right: nav area &ndash;&gt;-->
+    <!--<div class="pull-right">-->
+    <!--&lt;!&ndash; collapse menu button &ndash;&gt;-->
+    <!--<div id="hide-menu" class="btn-header pull-right">-->
+    <!--<span> <a href="javascript:void(0);" data-action="toggleMenu" title="Collapse Menu"><i-->
+    <!--class="fa fa-reorder"></i></a> </span>-->
+    <!--</div>-->
+    <!--&lt;!&ndash; logout button &ndash;&gt;-->
+    <!--<div id="logout" class="btn-header transparent pull-right">-->
+    <!--<span> <a href="login.html" title="Sign Out" data-action="userLogout"-->
+    <!--data-logout-msg="You can improve your security further after logging out by closing this opened browser"><i-->
+    <!--class="fa fa-sign-out"></i></a> </span>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!-- end pulled right: nav area -->
+</header>
+<!-- END HEADER -->
+
+<!-- #NAVIGATION -->
+<!-- Left panel : Navigation area -->
+<!-- Note: This width of the aside area can be adjusted through LESS/SASS variables -->
+<aside id="left-panel" class="open-panel">
+    <!-- User info -->
+    <!--<div class="login-info">-->
+    <!--<span> &lt;!&ndash; User image size is adjusted inside CSS, it should stay as is &ndash;&gt;-->
+    <!--<a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">-->
+    <!--<img src="img/avatars/sunny.png" alt="me" class="online"/>-->
+    <!--<span>greenlabs factory</span>-->
+    <!--<i class="fa fa-angle-down"></i>-->
+    <!--</a>-->
+    <!--</span>-->
+    <!--</div>-->
+    <!-- end user info -->
+
+    <!-- NAVIGATION : This navigation is also responsive
+
+    To make this navigation dynamic please make sure to link the node
+    (the reference to the nav > ul) after page load. Or the navigation
+    will not initialize.
+    -->
+    <nav>
+        <ul>
+        </ul>
+    </nav>
+
+
+</aside>
+<!-- END NAVIGATION -->
+
+<!-- #MAIN PANEL -->
+<div id="main" role="main">
+    <div class="navbar nav-top navbar-fixed-top">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mobile-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <button class="navbar-toggle toggle-menu"><i class="material-icons">&#xE53B;</i></button>
+            <a class="navbar-brand" href="#ajax/dashboard.html"><img src="img/logo_greenlabsApps.png" alt=""></a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="mobile-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img src="img/avatars/male.png" alt="">
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle username" data-toggle="dropdown">
+                        <!--<img src="img/avatars/male.png" alt="">-->
+                        Username <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="#ajax/profile.html"><i class="fa fa-user"></i>Profile</a>
+                        </li>
+                        <li>
+                            <button type="button" class="btn-logout buttonLogout"><i class="fa fa-sign-out"></i>Logout
+                            </button>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <div id="shortcut">
+        <!--<ul>-->
+        <!--&lt;!&ndash; <li>-->
+        <!--<a href="#ajax/inbox.html" class="jarvismetro-tile big-cubes bg-color-blue"> <span class="iconbox"> <i-->
+        <!--class="fa fa-envelope fa-4x"></i> <span>Mail <span-->
+        <!--class="label pull-right bg-color-darken">14</span></span> </span> </a>-->
+        <!--</li>-->
+        <!--<li>-->
+        <!--<a href="#ajax/calendar.html" class="jarvismetro-tile big-cubes bg-color-orangeDark"> <span class="iconbox"> <i-->
+        <!--class="fa fa-calendar fa-4x"></i> <span>Calendar</span> </span> </a>-->
+        <!--</li>-->
+        <!--<li>-->
+        <!--<a href="#ajax/gmap-xml.html" class="jarvismetro-tile big-cubes bg-color-purple"> <span class="iconbox"> <i-->
+        <!--class="fa fa-map-marker fa-4x"></i> <span>Maps</span> </span> </a>-->
+        <!--</li>-->
+        <!--<li>-->
+        <!--<a href="#ajax/invoice.html" class="jarvismetro-tile big-cubes bg-color-blueDark"> <span class="iconbox"> <i-->
+        <!--class="fa fa-book fa-4x"></i> <span>Invoice <span class="label pull-right bg-color-darken">99</span></span> </span>-->
+        <!--</a>-->
+        <!--</li>-->
+        <!--<li>-->
+        <!--<a href="#ajax/gallery.html" class="jarvismetro-tile big-cubes bg-color-greenLight"> <span class="iconbox"> <i-->
+        <!--class="fa fa-picture-o fa-4x"></i> <span>Gallery </span> </span> </a>-->
+        <!--</li> &ndash;&gt;-->
+        <!--<li>-->
+        <!--<a href="#ajax/profile.html" class="jarvismetro-tile big-cubes selected bg-color-pinkDark">-->
+        <!--<span class="iconbox">-->
+        <!--<i class="fa fa-user fa-4x"></i>-->
+        <!--<span>My Profile </span>-->
+        <!--</span>-->
+        <!--</a>-->
+        <!--</li>-->
+        <!--</ul>-->
+    </div>
+    <!-- END SHORTCUT AREA -->
+
+    <!-- #MAIN CONTENT -->
+    <div id="content">
+    </div>
+    <!-- END #MAIN CONTENT -->
+</div>
+<!-- END #MAIN PANEL -->
+
+<!-- #PAGE FOOTER -->
+<div class="page-footer">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <span style="margin-left:10px;">Greenlabs Apps</span> © 2016</span>
+        </div>
+    </div>
+    <!-- end row -->
+</div>
+<!-- END FOOTER -->
+
+<!-- #SHORTCUT AREA : With large tiles (activated via clicking user name tag)
+     Note: These tiles are completely responsive, you can add as many as you like -->
+
+<!--================================================== -->
+
+<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)
+<script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>-->
+
+
+<!-- #PLUGINS -->
+<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    if (!window.jQuery) {
+        document.write('<script src="js/libs/jquery-2.1.1.min.js"><\/script>');
+    }
+</script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script>
+    if (!window.jQuery.ui) {
+        document.write('<script src="js/libs/jquery-ui-1.10.3.min.js"><\/script>');
+    }
+</script>
+
+<!-- IMPORTANT: APP CONFIG -->
+<script src="js/app.config.js"></script>
+
+<!-- JS TOUCH : include this plugin for mobile drag / drop touch events-->
+<script src="js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script>
+
+<!-- BOOTSTRAP JS -->
+<!--<script src="js/bootstrap/bootstrap.min.js"></script>-->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<!-- CUSTOM NOTIFICATION -->
+<script src="js/notification/SmartNotification.min.js"></script>
+
+<!-- JARVIS WIDGETS -->
+<script src="js/smartwidgets/jarvis.widget.min.js"></script>
+
+<!-- EASY PIE CHARTS -->
+<script src="js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
+
+<!-- SPARKLINES -->
+<script src="js/plugin/sparkline/jquery.sparkline.min.js"></script>
+
+<!-- JQUERY VALIDATE -->
+<script src="js/plugin/jquery-validate/jquery.validate.min.js"></script>
+
+<!-- JQUERY MASKED INPUT -->
+<script src="js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+
+<!-- JQUERY SELECT2 INPUT -->
+<script src="js/plugin/select2/select2.min.js"></script>
+
+<!-- JQUERY UI + Bootstrap Slider -->
+<script src="js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+
+<!-- browser msie issue fix -->
+<script src="js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
+
+<!-- FastClick: For mobile devices: you can disable this in app.js -->
+<script src="js/plugin/fastclick/fastclick.min.js"></script>
+
+<!--[if IE 8]>
+<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
+<![endif]-->
+
+<!-- Demo purpose only -->
+<!-- <script src="js/demo.min.js"></script> -->
+<!-- for dev mode we use unminified script --->
+<script src="source/js/demo.js"></script>
+
+<!-- MAIN APP JS FILE -->
+<!-- <script src="js/app.min.js"></script> -->
+<!-- for dev mode we use unminified script --->
+<script src="source/js/app.js"/>
+
+<!-- ENHANCEMENT PLUGINS : NOT A REQUIREMENT -->
+<!-- Voice command : plugin -->
+<script src="js/speech/voicecommand.min.js"></script>
+
+<!-- SmartChat UI : plugin -->
+<script src="js/smart-chat-ui/smart.chat.ui.min.js"></script>
+<script src="js/smart-chat-ui/smart.chat.manager.min.js"></script>
+
+<!-- Link to jQuery cookie -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+<script type="text/javascript">
+    /* DO NOT REMOVE : GLOBAL FUNCTIONS!
+     *
+     * pageSetUp(); WILL CALL THE FOLLOWING FUNCTIONS
+     *
+     * // activate tooltips
+     * $("[rel=tooltip]").tooltip();
+     *
+     * // activate popovers
+     * $("[rel=popover]").popover();
+     *
+     * // activate popovers with hover states
+     * $("[rel=popover-hover]").popover({ trigger: "hover" });
+     *
+     * // activate inline charts
+     * runAllCharts();
+     *
+     * // setup widgets
+     * setup_widgets_desktop();
+     *
+     * // run form elements
+     * runAllForms();
+     *
+     ********************************
+     *
+     * pageSetUp() is needed whenever you load a page.
+     * It initializes and checks for all basic elements of the page
+     * and makes rendering easier.
+     *
+     */
+
+    var initMenu = function () {
+        var user = JSON.parse(sessionStorage.getItem('user'));
+        var username = user.username;
+        $('.username').html(username.toUpperCase() + ' <span class="caret"></span>');
+
+        var html = '';
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', user.token);
+            },
+            type: "GET",
+            url: BASE_URL + "menu/user",
+            dataType: "json",
+            success: function (result) {
+                var json = result;
+                var parentMenus = [];
+                var childMenus = [];
+                var resultData = $.each(json, function (index, value) {
+                    var url = value.url;
+                    var name = value.name;
+                    var href = value.href;
+                    var orderNumber = value.idParent;
+                    var idParent = value.idParent;
+                    var id = value.id;
+                    var urutan = value.roleMenu.id;
+                    var child = value.id;
+                    if (value.idParent == 0) {
+                        parentMenus.push({
+                            "child": childMenus,
+                            "url": url,
+                            "name": name,
+                            "href": href,
+                            "orderNumber": orderNumber,
+                            "idParent": idParent,
+                            "id": id,
+                            "urutan": urutan
+                        });
+                    }
+                });
+
+                $.each(parentMenus, function (index, parentMenu) {
+                    $.each(resultData, function (index, childMenu) {
+                        var url = childMenu.url;
+                        var name = childMenu.name;
+                        var href = childMenu.href;
+                        var orderNumber = childMenu.orderNumber;
+                        var idParent = childMenu.idParent;
+                        var urutan = childMenu.roleMenu.id;
+                        var id = childMenu.id;
+                        if (parentMenu.id == childMenu.idParent && childMenu.idParent != 0) {
+                            childMenus.push({
+                                "url": url,
+                                "name": name,
+                                "href": href,
+                                "orderNumber": orderNumber,
+                                "idParent": idParent,
+                                "urutan": urutan,
+                                "id": id
+                            });
+                        }
+                    });
+                });
+
+                $.each(parentMenus, function (index, value) {
+                    html += '<li>';
+                    if (value.name === "Dashboard") {
+                        if ($.cookie('activeMenu') == value.id) {
+                            html += '<li class="focus active">' +
+                                    '<a href="' + value.href + 'view/' + value.url + '" title="' + value.name + '" id="' + value.url + '" class="active">' +
+                                    '<span>' + value.name + '</span></a></li>';
+                        } else {
+                            html += '<li class="focus">' +
+                                    '<a href="' + value.href + 'view/' + value.url + '" title="' + value.name + '" id="' + value.url + '">' +
+                                    '<span>' + value.name + '</span></a></li>';
+                        }
+                    } else {
+                        html += '<a href="' + value.href + '" title="' + value.name + '">' +
+                                '<i class="' + value.class_i + '"></i>' +
+                                '<span class="' + value.class_span + '">' + value.name + '</span></a>';
+                        html += '<ul>';
+
+                        $.each(childMenus, function (j, m) {
+                            if (value.id === m.idParent && m.idParent != 0) {
+                                if ($.cookie('activeMenu') == m.url) {
+                                    html += '<li class="focus active">' +
+                                            '<a href="' + m.href + 'view/' + m.url + '" title="' + m.name + '" id="' + m.url + '" class="active">' +
+                                            '<span>' + m.name + '</span></a></li>';
+                                } else {
+                                    html += '<li class="focus">' +
+                                            '<a href="' + m.href + 'view/' + m.url + '" title="' + m.name + '" id="' + m.url + '">' +
+                                            '<span>' + m.name + '</span></a></li>';
+                                }
+                            }
+                        });
+                    }
+
+                    html += '</ul>';
+                    html += '</li>';
+                });
+
+                $('nav ul').append(html).jarvismenu({
+                            accordion: menu_accordion || true,
+                            speed: menu_speed || true,
+                            closedSign: '<em class="fa fa-angle-down"></em>',
+                            openedSign: '<em class="fa fa-angle-up"></em>'
+                        }
+                );
+
+                var url = location.href.split('#').splice(1).join('#');
+                $('.focus a').on('click', function (e) {
+                    e.preventDefault();
+                    $('.focus a').removeClass('active');
+                    $(this).addClass('active');
+                    $.cookie("activeMenu", this.id); //save activeMenu to the cookie
+                    console.log($.cookie("activeMenu"))
+                });
+
+//                $('nav li.active').removeClass("active");
+//                // match the url and add the active class
+//                $('nav li:has(a[href="' + url + '"])').addClass("active");
+//
+//                var title = ($('nav a[href="' + url + '"]').attr('title'));
+//                $('nav ul').find("li.active").each(function () {
+//                    $(this).parents("ul").slideDown(235);
+//                    $(this).parents("ul").parent("li").find("b:first").html('<em class="fa fa-minus-square-o"></em>');
+//                    $(this).parents("ul").parent("li").addClass("open");
+//                });
+            },
+            complete: function () {
+                $('aside nav').after('<span class="minifyme" data-action="minifyMenu"> <i class="fa fa-arrow-circle-left hit"></i> </span>'); //not working yet
+
+            },
+            error: function (xhr, status, thrownError, error) {
+                container.html('<h4 class="ajax-loading-error"><i class="fa fa-warning txt-color-orangeDark"></i> Error requesting <span class="txt-color-red">' + url + '</span>: ' + xhr.status + ' <span style="text-transform: capitalize;">' + thrownError + '</span></h4>');
+            }
+        });
+    };
+
+    pageSetUp();
+    // PAGE RELATED SCRIPTS
+
+    // pagefunction
+    var pagefunction = function () {
+        $.fn.leftNav = initMenu(); //overide function
+        effectScroll();
+        toggleNav();
+    };
+
+    function toggleNav() {
+        $(".toggle-menu").button().click(function () {
+            if ($("#left-panel").hasClass("open-panel")) {
+                $("#left-panel").removeClass("open-panel");
+            } else {
+                $("#left-panel").addClass("open-panel");
+            }
+        });
+    }
+
+    function effectScroll() {
+        $(window).scroll(function () {
+            var $this = $(this);
+            if ($this.scrollTop() > 70) {
+                $('body').addClass('onscroll');
+            } else if ($this.scrollTop() < 70) {
+                $('body').removeClass('onscroll');
+            }
+
+            delete $this.this;
+        });
+    }
+
+    $(".buttonLogout").button().click(function () {
+        var user = JSON.parse(sessionStorage.getItem('user'));
+        console.log("=========", user);
+        sessionStorage.clear();
+        window.location = "./login.html";
+//        $.ajax({
+//            beforeSend: function (request) {
+//                request.setRequestHeader('Authorization', user.token);
+//            },
+//            type: 'GET',
+//            url: BASE_URL + 'logout',
+//            data: {token: user.token},
+//            cache: false,
+//            crossDomain: true,
+//            contentType: 'application/json;charset=UTF-8',
+//            dataType: 'json',
+//            success: function (data, status, jqxhr) {
+//                console.log(data);
+//                sessionStorage.clear();
+//                window.location = "./login.html";
+//            }
+//        });
+    });
+
+    pagefunction();
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task" xmlns="http://www.springframework.org/schema/beans"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:solr="http://www.springframework.org/schema/data/solr"
+       xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+     http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd http://www.springframework.org/schema/data/solr http://www.springframework.org/schema/data/solr/spring-solr.xsd">
+
+    <context:component-scan base-package="id.or.greenlabs.app.core.dao"/>
+    <context:component-scan base-package="id.or.greenlabs.app.core.service"/>
+    <context:component-scan base-package="id.or.greenlabs.app.core.aspect"/>
+
+    <task:annotation-driven mode="proxy"/>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <context:property-placeholder location="classpath:config.properties"/>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="defaultAutoCommit" value="false"/>
+        <property name="maxWaitMillis" value="60000"/>
+        <property name="removeAbandonedOnBorrow" value="true"/>
+        <property name="removeAbandonedTimeout" value="3600"/>
+        <property name="logAbandoned" value="true"/>
+    </bean>
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="rollbackOnCommitFailure" value="true"/>
+    </bean>
+
+    <bean id="transactionTemplate"
+          class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="transactionManager"/>
+    </bean>
+
+    <bean id="profile" class="id.or.greenlabs.app.core.Profile">
+        <property name="name" value="${profile.name}"/>
+        <property name="uploadLocation" value="${ssh.uploadLocations}"/>
+        <property name="appTitle" value="${appTitle}"/>
+        <property name="host" value="${ssh.host}"/>
+        <property name="sshDirectory" value="${ssh.sshDirectory}"/>
+        <property name="username" value="${ssh.username}"/>
+        <property name="password" value="${ssh.password}"/>
+        <property name="port" value="${ssh.port}"/>
+        <property name="keyStorePath" value="D:/backup/Keystore/sidkeystore"/>
+        <property name="imagePath" value="D:/temp/"/>
+    </bean>
+
+    <import resource="cache-context.xml"/>
+
+    <solr:solr-client id="solrClient" url="${solr.host}" />
+
+    <bean id="solrTemplate" class="org.springframework.data.solr.core.SolrTemplate">
+        <constructor-arg ref="solrClient" />
+    </bean>
+
+    <!--<bean id="searchRepository" class="id.or.greenlabs.app.core.repository.SolrNewsItemRepository">-->
+        <!--<property name="solrOperations" ref="solrTemplate" />-->
+    <!--</bean>-->
+
+</beans>

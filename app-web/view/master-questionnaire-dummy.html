@@ -1,0 +1,427 @@
+<!-- Bread crumb is created dynamically -->
+<!-- row -->
+<div class="row">
+    <!-- col -->
+    <div class="col-xs-12">
+        <h1 class="page-title txt-color-blueDark">
+            Master
+            <i class="fa fa-angle-right fa-fw "></i>
+            <span><a href="#view/master-questionnaire.html">Master Kuisioner</a></span>
+        </h1>
+    </div>
+    <!-- end col -->
+</div>
+<!-- end row -->
+<!-- widget grid -->
+<section id="widget-grid" class="">
+    <div class="row">
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="padding">
+                <form id="input_question" class="form-horizontal smart-form quest-form">
+                    <legend style="border-bottom: 1px solid #EEE;padding-bottom:10px;margin-bottom:0;">
+                        Master Kuisioner
+                    </legend>
+
+                    <!-- input-field -->
+                    <fieldset class="input-field">
+                        <div class="row">
+                            <section class="col-sm-10 col-md-5">
+                                <label class="label-left">Jumlah Aspek Teknis</label>
+
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="max_option" value="1"
+                                           style="padding-left:10px;">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-primary" type="button" id="btnInput" data-toggle="modal" data-target="#modal_questionnaire_berita">Submit</button>
+                                    </span>
+                                </div>
+                            </section>
+                        </div>
+                        <footer class="row">
+                            <div class="col-md-6 col-md-offset-3">
+
+                            </div>
+                        </footer>
+                    </fieldset>
+                    <!-- end -->
+
+                    <!-- start step form -->
+                    <div id="wizard">
+                    </div>
+
+                    <div class="modal fade modal_questionnaire_berita" tabindex="-1" role="dialog"
+                         aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <form id="input_questions" class="form-horizontal smart-form quest-form quest-berita">
+                                    <h3>Nama Aspek Teknis</h3>
+                                    <div id="row-input" class="row">
+                                        <div class="col-xs-12 col-sm-8">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="questionParent"
+                                                       name="questionParent" style="padding-left:10px;"> <span
+                                                    class="input-group-btn">
+                                            <button class="btn btn-primary btn-add-sub" type="button" id="btnSub">
+                                                <i class="material-icons"> &#xE145;</i></button></span>
+                                            </div>
+                                            <!-- sart sub inpput two-->
+                                            <div id="sub-input-one"></div>
+                                            <div id="sub-input-two"></div>
+                                            <!-- end -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4">
+                                            <div class="left-col-row">
+                                                <div class="checked-main">
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" id="checkboxSub"><i></i>Add Sub</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel
+                                        </button>
+                                        <button type="button" id="btnSimpan"
+                                                class="btn btn-primary btn_save_transaksi_questionnaire"
+                                                data-dismiss="modal">
+                                            Simpan
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end step form -->
+                </form>
+            </div>
+            <!--<div class="padding">-->
+            <!--</div>-->
+            <!-- end padding -->
+        </article>
+        <!-- WIDGET END -->
+    </div>
+    <!-- end row -->
+</section>
+<!-- end widget grid -->
+
+<div id="modal-success" hidden>
+    <div class="content-modal">Data berhasil di simpan <i class="material-icons">&#xE834;</i></div>
+</div>
+
+<div id="modal-error" hidden style="min-height:0 !important;">
+    <div class="content-modal">Error<i class="material-icons">&#xE5CD;</i></div>
+</div>
+
+<script type="text/javascript">
+    pageSetUp();
+    var uniqId = 0; // untuk uniq questionChild dan answerQuestion
+
+    var pagefunction = function () {
+        scrolltop();
+        setupWizard();
+        validateForm();
+    };
+
+    function scrolltop() {
+        $("html, body").animate({scrollTop: 0}, 300);
+    }
+
+    function setupWizard() {
+        $('#btnInput').click(function () {
+//            addNewWizard($("input[name='max_option']").val())
+            $('.modal_questionnaire_berita').modal('toggle');
+        });
+    }
+
+    function validateForm() {
+        $('#input_question').bootstrapValidator({
+            fields: {
+                max_option: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Wajib di isi'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function onStepChanged() {
+        uniqId = 0; // reset id menjadi 0
+    }
+
+    function addNewWizard(maxOptions) {
+        $("#wizard").empty();
+        var wizard = $("#wizard").steps({
+            headerTag: "h3",
+            bodyTag: "form",
+            transitionEffect: "slideLeft",
+            stepsOrientation: "vertical",
+            autoFocus: true,
+            onFinished: save,
+            onStepChanged: onStepChanged
+        });
+
+        for (var index = 0; index < maxOptions; index++) {
+            wizard.steps("add", {
+                title: "POINT " + (index + 1),
+                stepsOrientation: "vertical",
+                content: '<h3>Nama Aspek Teknis</h3>' +
+                '<div id="row-input" class="row">' +
+                '<div class="col-xs-12 col-sm-8">' +
+                '<div class="input-group">' +
+                '<input type="text" class="form-control" id="questionParent" name="questionParent" style="padding-left:10px;">' +
+                '<span class="input-group-btn">' +
+                '<button class="btn btn-primary btn-add-sub" type="button" id="btn-' + index + '"><i class="material-icons">&#xE145;</i></button>' +
+                '</span>' +
+                '</div>' +
+                '<!-- sart sub inpput two-->' +
+                '<div id="sub-input-one-' + index + '"></div>' +
+                '<div id="sub-input-two-' + index + '"></div>' +
+                '<!-- end -->' +
+                '</div>' +
+                '<div class="col-xs-12 col-sm-4">' +
+                '<div class="left-col-row">' +
+                '<div class="checked-main">' +
+                '<label class="checkbox">' +
+                '<input type="checkbox" id="checkbox-' + index + '"><i></i>Add Sub</label></div>' +
+                '</div></div></div>'
+            });
+
+            buttonAddClickListener(index); //event per id
+            checkboxChangeListener(index);//event per id
+            validateWizard(index);
+        }
+    }
+
+    function validateWizard(index) {
+        $('#wizard-p-' + index).bootstrapValidator({
+            fields: {
+                questionParent: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Wajib di isi'
+                        }
+                    }
+                },
+                answerQuestion: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Wajib di isi'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    //    function checkboxChangeListener(index) {
+    $('#checkboxSub').change(function () {
+        uniqId = 0; //reset id menjadi 0
+        if (this.checked) {
+            $("#sub-input-one").empty();
+        } else {
+            $("#sub-input-two").empty();
+        }
+    });
+    //    }
+
+    //    function buttonAddClickListener(index) {
+    $('#btnSub').click(function () {
+        if ($('#checkboxSub').filter(':checked').length == 1) {
+            uniqId += 1;
+            $('#sub-input-two').append('<div id="sub-two"><div id="row-input" class="row">' +
+                    '<div class="col-sm-12">' +
+                    '<div style="margin-bottom:10px;overflow:hidden;">' +
+                    '<div class="col-xs-12">' +
+                    '<label class="label-left">Detail</label>' +
+                    '<label class="input"><input type="text" name="questionDetail_' + uniqId + '"></label>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="sub-input">' +
+                    '<div id="row-sub-menu" class="row" style="margin-left:63px !important;">' +
+                    '<div class="col-xs-12">' +
+                    '<label class="label-left" style="padding:0;">Pilihan 1</label>' +
+                    '<label class="input"><input type="text" name="answerQuestion_' + uniqId + '"></label>' +
+                    '</div>' +
+                    '</div>' + // end row-sub-menu
+                    '<div id="row-sub-menu" class="row" style="margin-left:63px !important;">' +
+                    '<div class="col-xs-12">' +
+                    '<label class="label-left" style="padding:0;">Pilihan 2</label>' +
+                    '<label class="input"><input type="text" name="answerQuestion_' + uniqId + '"></label>' +
+                    '</div>' +
+                    '<div class="col-xs-12"><label class="input"><input type="hidden" name="totalId" value="' + uniqId + '"></label></div>' +
+                    '</div>' + // end row-sub-menu
+                    '</div>' + //sub-input
+                    '</div>' + // end col 6
+                    '</div></div>'); // end sub-two
+        } else {
+            $('#sub-input-one').append('<div id="sub-one"><div id="sub-default" class="sub-input">' +
+                    '<div id="row-sub-menu" class="row">' +
+                    '<div class="col-xs-12">' +
+                    '<label class="label-left">Pilihan 1</label>' +
+                    '<label class="input"><input type="text" id="answerQuestion" name="answerQuestion"></label>' +
+                    '</div>' +
+                    '</div>' + // end row-sub-menu
+                    '<div id="row-sub-menu" class="row">' +
+                    '<div class="col-xs-12">' +
+                    '<label class="label-left">Pilihan 2</label>' +
+                    '<label class="input"><input type="text" id="answerQuestion" name="answerQuestion"></label>' +
+                    '</div>' +
+                    '</div>' + // end row-sub-menu
+                    '</div></div>'); // end sub-one
+        }
+    });
+
+
+    $('.btn_save_transaksi_questionnaire').click(function () {
+        var data = [];
+
+//        for (var step = 0; step < maxOptions; step++) {
+        var result = convertFormToJSON($("#input_question"));
+        var json = {
+            questionParent: result.questionParent,
+            questionnaireDetails: []
+        };
+
+        if (result.totalId == undefined) {
+            var questionDetail = '{"name" : "-", ' + '"answerQuestions":{';
+            for (var j = 0; j < 2; j++) { //total answer pasti 2
+                questionDetail += '"' + result['answerQuestion'][j];
+                if (j == 0) {
+                    questionDetail += '": false,';
+                } else {
+                    questionDetail += '": false}}';
+                }
+            }
+
+            json.questionnaireDetails.push(JSON.parse(questionDetail));
+        } else {
+            for (var i = 1; i <= result.totalId.length; i++) {
+                var questionDetail = '{"name" : ' + '"' + result['questionDetail_' + i] + '", ' + '"answerQuestions": {';
+                for (var j = 0; j < 2; j++) { //total answer pasti 2
+                    questionDetail += '"' + result['answerQuestion_' + i][j];
+                    if (j == 0) {
+                        questionDetail += '": false,';
+                    } else {
+                        questionDetail += '": false }}';
+                    }
+                }
+
+                json.questionnaireDetails.push(JSON.parse(questionDetail));
+            }
+        }
+
+        data.push(json);
+//        }
+
+        console.log(data);
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: BASE_URL + "master/questionnaire",
+            data: JSON.stringify(data),
+            success: function (response) {
+                console.log("Response", response);
+                if (response == 'success') {
+                    $("#modal-success").dialog({
+                        modal: true,
+                        draggable: false,
+                        resizable: false,
+                        show: {
+                            effect: 'fade',
+                            duration: 1000
+                        },
+                        hide: {
+                            effect: 'fade',
+                            duration: 1000
+                        },
+                        open: function () {
+                            $(this).dialog('close');
+                        },
+                        close: function () {
+                            $(this).dialog('destroy');
+                        }
+                    });
+                }
+            },
+            error: function () {
+                $("#modal-error").dialog({
+                    modal: true,
+                    draggable: false,
+                    resizable: false,
+                    show: {
+                        effect: 'fade',
+                        duration: 1000
+                    },
+                    hide: {
+                        effect: 'fade',
+                        duration: 1000
+                    },
+                    open: function () {
+                        $(this).dialog('close');
+                    },
+                    close: function () {
+                        $(this).dialog('destroy');
+                    }
+                });
+            }
+        })
+    });
+
+    function save() {
+        var maxOptions = $("input[name='max_option']").val();
+        var data = [];
+
+//        for (var step = 0; step < maxOptions; step++) {
+        var result = convertFormToJSON($("#input_questions"));
+        var json = {
+            questionParent: result.questionParent,
+            questionnaireDetails: []
+        };
+
+
+
+//        if (result.totalId == undefined) {
+//            var questionDetail = '{"name" : "-", ' + '"answerQuestions":{';
+//            for (var j = 0; j < 2; j++) { //total answer pasti 2
+//                questionDetail += '"' + result['answerQuestion'][j];
+//                if (j == 0) {
+//                    questionDetail += '": false,';
+//                } else {
+//                    questionDetail += '": false}}';
+//                }
+//            }
+//
+//            json.questionnaireDetails.push(JSON.parse(questionDetail));
+//        } else {
+//            for (var i = 1; i <= result.totalId.length; i++) {
+//                var questionDetail = '{"name" : ' + '"' + result['questionDetail_' + i] + '", ' + '"answerQuestions": {';
+//                for (var j = 0; j < 2; j++) { //total answer pasti 2
+//                    questionDetail += '"' + result['answerQuestion_' + i][j];
+//                    if (j == 0) {
+//                        questionDetail += '": false,';
+//                    } else {
+//                        questionDetail += '": false }}';
+//                    }
+//                }
+//
+//                json.questionnaireDetails.push(JSON.parse(questionDetail));
+//            }
+//        }
+
+        data.push(json);
+//        }
+
+        console.log(JSON.stringify(data));
+
+
+    }
+
+    loadScript("js/plugin/bootstrapvalidator/bootstrapValidator.min.js", function () {
+        loadScript("js/plugin/jquery-step/jquery.steps.min.js", pagefunction)
+    });
+
+</script>

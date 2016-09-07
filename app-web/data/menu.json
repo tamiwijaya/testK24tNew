@@ -1,0 +1,127 @@
+{
+  "data": [
+    {
+      "id": "",
+      "href": "#",
+      "class_i": "fa fa-lg fa-fw fa-home",
+      "class_li": "",
+      "class_span": "menu-item-parent",
+      "title": "Dashboard",
+      "text": "Dashboard",
+      "childs": [
+        {
+          "id": "",
+          "href": "view/dashboard.html",
+          "class_i": "",
+          "class_li": "",
+          "class_span": "menu-item-parent",
+          "title": "Dashboard",
+          "text": "Analytics Dashboard"
+        },
+        {
+          "id": "",
+          "href": "view/dashboard-social.html",
+          "class_i": "",
+          "class_li": "",
+          "class_span": "menu-item-parent",
+          "title": "Dashboard",
+          "text": "Social Wall"
+        }
+      ]
+    },
+
+    {
+      "id": "",
+      "href": "#",
+      "class_i": "fa fa-lg fa-fw fa-table",
+      "class_li": "",
+      "class_span": "menu-item-parent",
+      "title": "Menu",
+      "childs": [
+        {
+          "id": "",
+          "href": "view/pencarian.html",
+          "class_i": "",
+          "class_li": "",
+          "class_span": "",
+          "title": "Pencarian Berita",
+          "text": "Pencarian Berita"
+        }
+      ]
+    },
+    {
+      "id": "",
+      "href": "#",
+      "class_i": "fa fa-lg fa-fw fa-table",
+      "class_li": "",
+      "class_span": "menu-item-parent",
+      "title": "Setting",
+      "childs": [
+        {
+          "id": "",
+          "href": "view/hak-akses.html",
+          "class_i": "",
+          "class_li": "",
+          "class_span": "",
+          "title": "Hak Akses",
+          "text": "Hak Akses"
+        },
+        {
+          "id": "",
+          "href": "view/news-item.html",
+          "class_i": "",
+          "class_li": "",
+          "class_span": "",
+          "title": "Setting Berita",
+          "text": "Setting Berita"
+        }
+      ]
+    },
+    {
+      "id": "",
+      "href": "#",
+      "class_i": "fa fa-lg fa-fw fa-cube txt-color-blue",
+      "class_li": "top-menu-invisible",
+      "class_span": "menu-item-parent",
+      "title": "SmartAdmin Intel",
+      "childs": [
+        {
+          "id": "",
+          "href": "ajax/layouts.html",
+          "class_i": "fa fa-lg fa-fw fa-gear",
+          "class_li": "",
+          "class_span": "menu-item-parent",
+          "title": "Dashboard",
+          "text": "App Layouts"
+        },
+        {
+          "id": "",
+          "href": "ajax/skins.html",
+          "class_i": "fa fa-lg fa-fw fa-picture-o",
+          "class_li": "",
+          "class_span": "menu-item-parent",
+          "title": "Dashboard",
+          "text": "Prebuilt Skins"
+        },
+        {
+          "id": "",
+          "href": "ajax/difver.html",
+          "class_i": "fa fa-stack-overflow",
+          "class_li": "",
+          "class_span": "menu-item-parent",
+          "title": "Dashboard",
+          "text": "App Variations"
+        },
+        {
+          "id": "",
+          "href": "ajax/applayout.html",
+          "class_i": "fa fa-cube",
+          "class_li": "",
+          "class_span": "menu-item-parent",
+          "title": "Dashboard",
+          "text": "App Settings"
+        }
+      ]
+    }
+  ]
+}

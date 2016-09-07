@@ -1,0 +1,336 @@
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            Setting
+            <i class="fa fa-angle-right fa-fw "></i>
+            <span><a href="#view/hak-akses.html">Hak Akses</a></span>
+        </h1>
+    </div>
+</div>
+<section id="widget-grid" class="">
+    <div class="row">
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="padding">
+                <div class="form-row">
+                    <legend style="border-bottom: 1px solid #EEE;margin-bottom: 0;">Setting Hak Akses</legend>
+                    <div style="overflow:hidden;margin:10px 0;">
+                        <div class="col-md-3" style="float:right;">
+                            <select style="margin: 10px 0;" class="form-control validate[required]" name="role" id="role"
+                                    onchange="onComboBoxRoleChange()"
+                                    placeholder="role">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <table class="table tree table-bordered table-striped table-condensed new-tb-hak-akses">
+                    <thead>
+                    <tr>
+                        <td align="center" rowspan="1" colspan="1" width="500px"></td>
+                        <td align="center" rowspan="1" colspan="5">ADMIN</td>
+                    </tr>
+                    <tr>
+                        <td align="center" width="500px">MENU</td>
+                        <td align="center" width="92px">read</td>
+                        <td align="center" width="92px">save</td>
+                        <td align="center" width="92px">edit</td>
+                        <td align="center" width="92px">delete</td>
+                        <td align="center" width="92px">print</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <footer style="padding: 40px 0 0;overflow: hidden;">
+                    <button type="button" class="btn btn-primary button-save-hak-akses" style="float:right;margin-top:-20px;">
+                        <i></i> Simpan
+                    </button>
+                </footer>
+            </div>
+        </article>
+    </div>
+</section>
+
+<script type="text/javascript">
+
+    var idRole;
+
+    pageSetUp();
+
+    var pagefunction = function () {
+        initRole();
+        treeGrid();
+    };
+
+    // treegrid table
+    function treeGrid() {
+        $('.tree').treegrid({
+            expanderExpandedClass: 'glyphicon glyphicon-minus',
+            expanderCollapsedClass: 'glyphicon glyphicon-plus'
+        });
+    }
+
+    /*
+     Init data role terlebih dahulu, kemudian init data hak akses berdasarkan role yang paling atas
+     */
+    function initRole() {
+        $select = $('#role');
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            url: BASE_URL + "roles",
+            dataType: "JSON",
+            type: "GET",
+            success: function (result) {
+                if (typeof(result) === "undefined" || result === null) {
+                    $select.html('<option value="">none available</option>');
+                    $(".role").removeClass('ajax_loader');
+                    return;
+                }
+
+                $select.html('');
+                $.each(result.data, function (key, val) {
+                    $select.append('<option value="' + val.id + '">' + val.roleLevel + '</option>');
+                });
+
+                $(".role").removeClass('ajax_loader');
+                idRole = result.data[0].id; //dapatkan role yang pertama
+                $.ajax({
+                    beforeSend: function (request) {
+                        request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+                    },
+                    url: BASE_URL + "menu/role",
+                    data : {id: idRole},
+                    type: "GET",
+                    success: function (json) {
+                        if (json != null) {
+                            $(".new-tb-hak-akses").find("tbody").remove();
+                            initDataMenu(json);
+                        }
+                    }
+                });
+            },
+            error: function () {
+                console.log('role');
+                $select.html('<option value="">none available</option>');
+            }
+        });
+    }
+
+    function onComboBoxRoleChange() {
+        idRole = $("#role option:selected").val();
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            url: BASE_URL + "menu/role",
+            data : {id: idRole},
+            type: "GET",
+            success: function (json) {
+                if (json != null) {
+                    $(".new-tb-hak-akses").find("tbody").remove();
+                    initDataMenu(json);
+                }
+            }
+        });
+    }
+
+    function initDataMenu(json) {
+        $(".new-tb-hak-akses").append("<tbody class='tbody_users'>");
+        var parentMenu = 0;
+        $.each(json, function (index, value) {
+            var rootNodeClass = "";
+            if (value.idParent == 0) {
+                parentMenu = value.id;
+                rootNodeClass = "treegrid-" + value.idParent;
+                //isi style sebagai root node
+                var canRead = value.roleMenu.canRead;
+                var tr = "<tr class='" + rootNodeClass + "'>" +
+                        "<td class='portalName'>" + value.name + "</td>";
+                if (canRead) {
+                    tr += "<td><input type='checkbox' name='canRead' checked/></td>";
+                } else {
+                    tr += "<td><input type='checkbox' name='canRead' /></td>";
+                }
+                tr += "<td></td>" +
+                        "<td></td>" +
+                        "<td></td>" +
+                        "<td></td>" +
+                        "<td style='display: none'>" + value.id + "</td>" +
+                        "<td style='display: none'>" + value.roleMenu.id + "</td>";
+                $(".new-tb-hak-akses").find("tbody").append(tr);
+            } else {
+                rootNodeClass = "treegrid-2 treegrid-parent-1";
+                //isi style sebagai child node
+                var tr = "<tr class='" + rootNodeClass + "'>" +
+                        "<td class='portalName'>" + value.name + "</td>";
+                if (value.roleMenu.canRead) {
+                    tr += "<td><input type='checkbox' name='canRead' checked/></td>";
+                } else {
+                    tr += "<td><input type='checkbox' name='canRead' /></td>";
+                }
+
+                if (value.roleMenu.canSave) {
+                    tr += "<td><input type='checkbox' name='canSave' checked/></td>";
+                } else {
+                    tr += "<td><input type='checkbox' name='canSave' /></td>";
+                }
+
+                if (value.roleMenu.canEdit) {
+                    tr += "<td><input type='checkbox' name='canEdit' checked/></td>";
+                } else {
+                    tr += "<td><input type='checkbox' name='canEdit' /></td>";
+                }
+
+                if (value.roleMenu.canDelete) {
+                    tr += "<td><input type='checkbox' name='canDelete' checked/></td>";
+                } else {
+                    tr += "<td><input type='checkbox' name='canDelete' /></td>";
+                }
+
+                if (value.roleMenu.canPrint) {
+                    tr += "<td><input type='checkbox' name='canPrint' checked/></td>";
+                } else {
+                    tr += "<td><input type='checkbox' name='canPrint' /></td>";
+                }
+
+                tr += "<td style='display: none'>" + value.id + "</td>" +
+                        "<td style='display: none'>" + value.roleMenu.id + "</td>";
+                $(".new-tb-hak-akses").find("tbody").append(tr);
+            }
+
+        });
+    }
+
+    $(".button-save-hak-akses").button().click(function () {
+        var childMenu = [];
+        var parentMenu = [];
+        var menuList = [];
+        $(".new-tb-hak-akses tbody").find(".treegrid-0").each(function () {
+            var temp = $(this).find("td").toArray();
+            var canRead = $(temp[1]).find("input").is(":checked");
+            var id = $(temp[6]).html();
+            var role = {id: idRole}; // for make role is object
+            var menu = {id: $(temp[6]).html()}; // for make menu is object
+            var urutan = $(temp[7]).html();
+            if (urutan != "undefined") {
+                urutan = $(temp[7]).html()
+            } else {
+                urutan = 0;
+            }
+
+            checked = canRead == true;
+            var dataParentMenu = {
+                id: id,
+                urutan: urutan,
+                menu: menu,
+                role: role,
+                canRead: canRead,
+                canSave: false,
+                canEdit: false,
+                canDelete: false,
+                canPrint: false
+            };
+
+            parentMenu.push(dataParentMenu);
+        });
+
+        $(".new-tb-hak-akses tbody").find(".treegrid-parent-1").each(function () {
+            var temp = $(this).find("td").toArray();
+            var canRead = $(temp[1]).find("input").is(":checked");
+            var canSave = $(temp[2]).find("input").is(":checked");
+            var canEdit = $(temp[3]).find("input").is(":checked");
+            var canDelete = $(temp[4]).find("input").is(":checked");
+            var canPrint = $(temp[5]).find("input").is(":checked");
+            var id = $(temp[6]).html();
+            var role = {id: idRole}; // for make role is object
+            var menu = {id: $(temp[6]).html()}; // for make menu is object
+            var urutan = $(temp[7]).html();
+            if (urutan != "undefined") {
+                console.log("mas");
+                urutan = $(temp[7]).html();
+            } else {
+                urutan = 0;
+            }
+
+            if (canRead == true) {
+                checked = 1;
+            } else {
+                checked = 0;
+            }
+
+            if (canSave == true) {
+                checked = 1;
+            } else {
+                checked = 0;
+            }
+
+            if (canEdit == true) {
+                checked = 1;
+            } else {
+                checked = 0;
+            }
+
+            if (canDelete == true) {
+                checked = 1;
+            } else {
+                checked = 0;
+            }
+
+            if (canPrint == true) {
+                checked = 1;
+            } else {
+                checked = 0;
+            }
+
+            var dataChildMenu = {
+                id: id,
+                urutan: urutan,
+                menu: menu,
+                role: role,
+                canRead: canRead,
+                canSave: canSave,
+                canEdit: canEdit,
+                canDelete: canDelete,
+                canPrint: canPrint
+            };
+
+            childMenu.push(dataChildMenu);
+        });
+
+        menuList = parentMenu.concat(childMenu);
+        params = menuList;
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            url: BASE_URL + "role/menu",
+            data: JSON.stringify(params),
+            type: "POST",
+            contentType: "application/json",
+            success: function (response) {
+                params = null;
+                console.log(response);
+                infoMessage(MESSAGE_TYPE_SAVE_SUCCESS);
+            },
+            error: function() {
+                infoMessage(MESSAGE_TYPE_SAVE_FAILED);
+            }
+        });
+    });
+
+    loadScript("js/plugin/datatables/jquery.dataTables.min.js", function () {
+        loadScript("js/plugin/datatables/dataTables.colVis.min.js", function () {
+            loadScript("js/plugin/datatables/dataTables.tableTools.min.js", function () {
+                loadScript("js/plugin/datatables/dataTables.bootstrap.min.js", function () {
+                    loadScript("js/plugin/treegrid/jquery.treegrid.min.js", function () {
+                        loadScript("js/plugin/treegrid/jquery.treegrid.bootstrap3.js", function () {
+                            loadScript("js/plugin/datatable-responsive/datatables.responsive.min.js", pagefunction)
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+</script>
