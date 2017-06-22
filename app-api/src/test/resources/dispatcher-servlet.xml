@@ -8,7 +8,7 @@
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <context:component-scan base-package="id.or.greenlabs.app.api.controller"/>
+    <context:component-scan base-package="id.or.app.api.controller"/>
 
     <mvc:annotation-driven>
         <mvc:async-support default-timeout="30000" task-executor="taskExecutor"/>

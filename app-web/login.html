@@ -65,7 +65,7 @@
     <div id="content" class="container login-content">
         <div class="form-main">
             <div id="logo-group">
-                <img src="img/logo_greenlabsApps.png" alt="SmartAdmin">
+                <img src="" alt="">
             </div>
             <div id="alert-success" class="alert alert-success" hidden>
                 <a href="#" class="close" data-dismiss="alert">&times;</a>
@@ -196,11 +196,8 @@
                     sessionStorage.setItem('token', data.token);
                     if (data.token != undefined) {
                         $('#alert-success').prop("hidden", false).addClass("in").fadeOut(3500);
-                        if ($.cookie("activeMenu") != undefined) {
-                            window.location.href = "index.html#view/" + $.cookie("activeMenu");
-                        } else {
                             window.location.href = "index.html#view/dashboard.html";
-                        }
+
                     } else {
                         $('#alert-danger').prop("hidden", false).addClass("in").fadeOut(5000);
                     }

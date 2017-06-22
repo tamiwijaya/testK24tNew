@@ -1,0 +1,333 @@
+<!-- Bread crumb is created dynamically -->
+<div class="row">
+    <div class="col-xs-12">
+        <h1 class="page-title txt-color-blueDark">
+            Setting
+            <i class="fa fa-angle-right fa-fw "></i>
+            <span><a href="#view/members.html">Data Member</a></span>
+        </h1>
+    </div>
+    <!-- end col -->
+</div>
+<!-- end row -->
+<!-- widget grid -->
+<section id="widget-grid" class="">
+    <div class="row">
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="padding">
+                <div class="widget-body news-item">
+                    <form class="form-horizontal" id="form_user_management">
+                        <legend>Input Data Member</legend>
+                        <div class="content controls form-group">
+                            <div class="row" style="display: none">
+                                <div class="col-md-2">
+                                    <label>ID</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="number" name="id" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Nama<span>*</span></label>
+
+                                <div class="col-sm-5 name">
+                                    <input type="text" name="nama" placeholder="Nama" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Tanggal Lahir<span>*</span></label>
+
+                                <div class="col-sm-5 tanggalLahir">
+                                    <input type="text" id="datepicker" name="tanggalLahir" placeholder="Tanggal Lahir"
+                                           class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Alamat<span>*</span></label>
+
+                                <div class="col-sm-5 alamat">
+                                    <input type="text" name="alamat" placeholder="Alamat" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Email<span>*</span></label>
+
+                                <div class="col-sm-5 email">
+                                    <input type="email" name="email" placeholder="Email" class="form-control"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Telepon<span>*</span></label>
+
+                                <div class="col-sm-5 telepon">
+                                    <input type="text" name="telepon" placeholder="Telepon" class="form-control"
+                                           required>
+                                </div>
+                            </div>
+
+                            <div class="form-group hidden-xs">
+                                <div class="col-sm-offset-2 col-sm-5">
+                                    <button type="button" class="btn btn-primary btn-save-members" style="float: right">
+                                        <i></i> Simpan
+                                    </button>
+                                    <button type="reset" value="Reset" class="btn btn-warning btn-clear-user">Reset
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="dialog-confirm" title="Confirm" hidden>
+                <div><p><span class="ui-icon-alert" style="float:left; overflow: hidden; height: 25px">
+                </span>Anda yakin akan menghapus data ini?</p></div>
+            </div>
+            <div class="padding">
+                <table id="dt_members" class="table table-striped table-bordered table-hover" width="100%">
+                    <thead>
+                    <tr>
+                        <td align="center" hidden>ID</td>
+                        <td align="center">Nama</td>
+                        <td align="center">Tanggal Lahir</td>
+                        <td align="center">Alamat</td>
+                        <td align="center">Email</td>
+                        <td align="center">Telepon</td>
+                        <td align="center" rowspan='1' colspan='2'>Actions</td>
+                    </tr>
+                    </thead>
+                </table>
+                <!-- end #dt_members -->
+            </div>
+            <!--end border-c-->
+        </article>
+        <!-- WIDGET END -->
+    </div>
+    <!-- end row -->
+</section>
+<!-- end widget grid -->
+
+<script type="text/javascript">
+    pageSetUp();
+
+    var grid = jQuery("#grid");
+
+    var pagefunction = function () {
+        loadDataGrid();
+        validatForm();
+        styleFocusInput();
+        initWidget();
+    };
+
+    function initWidget() {
+        $("#datepicker").datepicker({
+            numberOfMonths: 1,
+            showButtonPanel: false,
+            dateFormat: 'yy-mm-dd'
+        });
+    }
+
+    function loadDataGrid() {
+        $("#dt_members").find("tbody").remove();
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            type: "GET",
+            contentType: "application/json",
+            url: BASE_URL + "members",
+            success: function (json) {
+                if (json != null) {
+                    $("#dt_members").append("<tbody class='tbody_members'>");
+                    $.each(json, function (index, value) {
+                        var tr = "<tr>" +
+                                "<td class='idMembers' style='display: none' >" + value.id + "</td>" +
+                                "<td class='nama'>" + value.nama + "</td>" +
+                                "<td class='tanggalLahir'>" + value.tanggalLahir + "</td>" +
+                                "<td class='alamat'>" + value.alamat + "</td>" +
+                                "<td class='email'>" + value.email + "</td>" +
+                                "<td class='telepon'>" + value.telepon + "</td>" +
+                                "<td width='10px'><button class='btn btn-xs btn-primary btn-edit-members' id='" + index + "'  data-original-title='Edit Row' >" +
+                                "<i class='fa fa-pencil'></i> Edit" + "</button></td>" +
+                                "<td width='10px'><button class='btn btn-xs btn-danger btn-delete-members' data-original-title='Hapus Row'>" +
+                                "<i class='fa fa-times'></i> Hapus" + "</button></td>";
+
+                        $("#dt_members").find("tbody").append(tr);
+                    });
+
+                    $("#dt_members").append("</tbody>");
+
+                    $(".btn-edit-members").button().click(function () {
+                        $("input[name='id']").val($(this).closest("tr").find(".idMembers").text());
+                        $("input[name='nama']").val($(this).closest("tr").find(".nama").text());
+                        $("input[name='tanggalLahir']").val($(this).closest("tr").find(".tanggalLahir").text());
+                        $("input[name='alamat']").val($(this).closest("tr").find(".alamat").text());
+                        $("input[name='email']").val($(this).closest("tr").find(".email").text());
+                        $("input[name='telepon']").val($(this).closest("tr").find(".telepon").text());
+
+                        // focus to form input when click button edit
+                        $(".form-control:visible:enabled:first").focus();
+
+                        $('div').removeClass('has-success has-error has-feedback');
+                        $('div i').removeClass('glyphicon-ok glyphicon-remove');
+                        $('div .help-block').hide();
+                    });
+
+                    // button for delete data Setting Berita
+                    $(".btn-delete-members").button().click(function () {
+                        var idMembers = $(this).closest("tr").find(".idMembers").text();
+                        var id = {id: parseInt(idMembers)};
+                        $("#dialog-confirm").dialog({
+                            height: 160,
+                            modal: true,
+                            buttons: {
+                                'Cancel': function () {
+                                    $(this).dialog('close');
+                                    resetForm();
+                                },
+                                'Confirm': function () {
+                                    $.ajax({
+                                        beforeSend: function (request) {
+                                            request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+                                        },
+                                        type: "DELETE",
+                                        contentType: "application/json",
+                                        url: BASE_URL + "members/delete",
+                                        data: JSON.stringify(id),
+                                        success: function (response) {
+                                            $("#dialog-confirm").dialog('close');
+                                            loadDataGrid();
+                                            resetForm();
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    });
+                }
+            }
+        });
+    }
+
+    function validatForm() {
+        $('#form_user_management').bootstrapValidator({
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                nama: {
+                    group: '.nama',
+                    validators: {
+                        notEmpty: {
+                            message: 'Nama wajib di isi'
+                        }
+                    }
+                },
+                email: {
+                    group: '.email',
+                    validators: {
+                        notEmpty: {
+                            message: 'Email wajib di isi'
+                        },
+                        emailAddress: {
+                            message: 'Alamat email tidak valid'
+                        }
+                    }
+                },
+                alamat: {
+                    group: '.alamat',
+                    validators: {
+                        notEmpty: {
+                            message: 'Alamat wajib di isi'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // button for save form input
+    $(".btn-save-members").button().click(function () {
+        var json = convertFormToJSON($("#form_user_management"));
+        if (json.nama != "" && json.email != "" && json.alamat != "") {
+            if (json.id == "") {
+                json.id = 0;
+            } else {
+                json.id = parseInt(json.id);
+            }
+
+
+            $.ajax({
+                beforeSend: function (request) {
+                    request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+                },
+                type: "POST",
+                contentType: "application/json",
+                url: BASE_URL + "members",
+                data: JSON.stringify(json),
+                success: function (response) {
+                    console.log(response);
+                    resetForm();
+                    loadDataGrid();
+                    infoMessage(MESSAGE_TYPE_SAVE_SUCCESS);
+                },
+                error: function () {
+                    infoMessage(MESSAGE_TYPE_SAVE_FAILED);
+                }
+            })
+        } else {
+            infoMessage(MESSAGE_TYPE_SAVE_FAILED);
+            $('div').addClass('has-success has-error has-feedback');
+            $('div i').addClass('glyphicon-ok glyphicon-remove');
+            $('div button i').removeClass('glyphicon-ok glyphicon-remove');
+            $('div .help-block').show();
+        }
+    });
+
+    // button for reset form input
+    $(".btn-clear-user").button().click(function () {
+        resetForm();
+    });
+
+    function styleFocusInput() {
+        var removeCss = true;
+        $('.form-control').button().click(function () {
+            $('.form-control').css({
+                'background-color': '#fff',
+                'border-color': '#66afe9'
+            });
+
+            removeCss = false;
+        });
+        $("html").click(function () {
+            if (removeCss) {
+                $(".form-control").css({
+                    'background-color': '#fbfbfb',
+                    'border-color': '#ccc'
+                });
+            }
+
+            removeCss = true;
+        });
+    }
+
+    function resetForm() {
+        $('.form-control').prop("disabled", false);
+        $('div').removeClass('has-success has-error has-feedback');
+        $('div i').removeClass('glyphicon-ok glyphicon-remove');
+        $('div .help-block').hide();
+
+        selectedRowData = null;
+        $("input[name='id']").val("");
+        $("input[name='nama']").val("");
+        $("input[name='tanggalLahir']").val("");
+        $("input[name='alamat']").val("");
+        $("input[name='email']").val("");
+        $("input[name='telepon']").val("");
+    }
+
+    loadScript("js/plugin/bootstrapvalidator/bootstrapValidator.min.js", pagefunction);
+
+</script>

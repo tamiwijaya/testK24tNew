@@ -9,7 +9,7 @@
     <cache:annotation-driven key-generator="enhancedDefaultKeyGenerator"/>
 
     <bean id="enhancedDefaultKeyGenerator"
-          class="id.or.greenlabs.app.core.util.EnhancedDefaultKeyGenerator"/>
+          class="id.or.app.core.util.EnhancedDefaultKeyGenerator"/>
 
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
         <constructor-arg ref="ehcache"/>

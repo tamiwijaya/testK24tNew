@@ -2,7 +2,7 @@
 <html lang="en-us">
 <head>
     <meta charset="utf-8">
-    <title>Greenlabs Apps</title>
+    <title>Test Apps</title>
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -187,7 +187,7 @@ Use search to find needed section.
                 <span class="icon-bar"></span>
             </button>
             <button class="navbar-toggle toggle-menu"><i class="material-icons">&#xE53B;</i></button>
-            <a class="navbar-brand" href="#ajax/dashboard.html"><img src="img/logo_greenlabsApps.png" alt=""></a>
+            <a class="navbar-brand" href="#ajax/dashboard.html"><img src="" alt=""></a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="mobile-collapse">
@@ -262,7 +262,7 @@ Use search to find needed section.
 <div class="page-footer">
     <div class="row">
         <div class="col-xs-12 col-sm-6">
-            <span style="margin-left:10px;">Greenlabs Apps</span> © 2016</span>
+            <span style="margin-left:10px;">Test Apps</span> © 2016</span>
         </div>
     </div>
     <!-- end row -->
@@ -393,6 +393,8 @@ Use search to find needed section.
     var initMenu = function () {
         var user = JSON.parse(sessionStorage.getItem('user'));
         var username = user.username;
+        var role = user.role;
+        console.log(role);
         $('.username').html(username.toUpperCase() + ' <span class="caret"></span>');
 
         var html = '';
@@ -401,33 +403,37 @@ Use search to find needed section.
                 request.setRequestHeader('Authorization', user.token);
             },
             type: "GET",
-            url: BASE_URL + "menu/user",
+            url: BASE_URL + "menu/role",
+            data: {id: role.id},
             dataType: "json",
             success: function (result) {
                 var json = result;
                 var parentMenus = [];
                 var childMenus = [];
                 var resultData = $.each(json, function (index, value) {
-                    var url = value.url;
-                    var name = value.name;
-                    var href = value.href;
-                    var orderNumber = value.idParent;
-                    var idParent = value.idParent;
-                    var id = value.id;
-                    var urutan = value.roleMenu.id;
-                    var child = value.id;
-                    if (value.idParent == 0) {
-                        parentMenus.push({
-                            "child": childMenus,
-                            "url": url,
-                            "name": name,
-                            "href": href,
-                            "orderNumber": orderNumber,
-                            "idParent": idParent,
-                            "id": id,
-                            "urutan": urutan
-                        });
+                    if(value.roleMenu.canRead){
+                        var url = value.url;
+                        var name = value.name;
+                        var href = value.href;
+                        var orderNumber = value.idParent;
+                        var idParent = value.idParent;
+                        var id = value.id;
+                        var urutan = value.roleMenu.id;
+                        var child = value.id;
+                        if (value.idParent == 0) {
+                            parentMenus.push({
+                                "child": childMenus,
+                                "url": url,
+                                "name": name,
+                                "href": href,
+                                "orderNumber": orderNumber,
+                                "idParent": idParent,
+                                "id": id,
+                                "urutan": urutan
+                            });
+                        }
                     }
+
                 });
 
                 $.each(parentMenus, function (index, parentMenu) {
@@ -456,15 +462,10 @@ Use search to find needed section.
                 $.each(parentMenus, function (index, value) {
                     html += '<li>';
                     if (value.name === "Dashboard") {
-                        if ($.cookie('activeMenu') == value.id) {
-                            html += '<li class="focus active">' +
-                                    '<a href="' + value.href + 'view/' + value.url + '" title="' + value.name + '" id="' + value.url + '" class="active">' +
-                                    '<span>' + value.name + '</span></a></li>';
-                        } else {
-                            html += '<li class="focus">' +
-                                    '<a href="' + value.href + 'view/' + value.url + '" title="' + value.name + '" id="' + value.url + '">' +
-                                    '<span>' + value.name + '</span></a></li>';
-                        }
+                        html += '<li class="focus">' +
+                                '<a href="' + value.href + 'view/' + value.url + '" title="' + value.name + '" id="' + value.url + '">' +
+                                '<span>' + value.name + '</span></a></li>';
+
                     } else {
                         html += '<a href="' + value.href + '" title="' + value.name + '">' +
                                 '<i class="' + value.class_i + '"></i>' +
@@ -473,15 +474,10 @@ Use search to find needed section.
 
                         $.each(childMenus, function (j, m) {
                             if (value.id === m.idParent && m.idParent != 0) {
-                                if ($.cookie('activeMenu') == m.url) {
-                                    html += '<li class="focus active">' +
-                                            '<a href="' + m.href + 'view/' + m.url + '" title="' + m.name + '" id="' + m.url + '" class="active">' +
-                                            '<span>' + m.name + '</span></a></li>';
-                                } else {
-                                    html += '<li class="focus">' +
-                                            '<a href="' + m.href + 'view/' + m.url + '" title="' + m.name + '" id="' + m.url + '">' +
-                                            '<span>' + m.name + '</span></a></li>';
-                                }
+                                html += '<li class="focus">' +
+                                        '<a href="' + m.href + 'view/' + m.url + '" title="' + m.name + '" id="' + m.url + '">' +
+                                        '<span>' + m.name + '</span></a></li>';
+
                             }
                         });
                     }

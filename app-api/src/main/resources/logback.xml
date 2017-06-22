@@ -38,9 +38,9 @@
 
 	<logger name="org.apache.http" level="ERROR"/>
 
-    <logger name="id.or.greenlabs.app.api" level="${log.app}"/>
+    <logger name="id.or.app.api" level="${log.app}"/>
 
-    <logger name="id.or.greenlabs.app.core" level="${log.app}"/>
+    <logger name="id.or.app.core" level="${log.app}"/>
 
 	<logger name="net.sf.ehcache" level="INFO" />
 

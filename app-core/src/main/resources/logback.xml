@@ -42,7 +42,7 @@
 
 	<logger name="org.springframework.aop.framework" level="INFO" />
 
-	<logger name="id.or.greenlabs.app.core" level="${log.app}"/>
+	<logger name="id.or.app.core" level="${log.app}"/>
 
 	<if condition='"${profile.name}".equals("DEVELOPMENT")'>
 		<then>

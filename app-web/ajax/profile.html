@@ -85,18 +85,27 @@
     };
 
     function initDataProfile() {
-        $.getJSON(BASE_URL + "setting/users/find", {
-            id: parseInt(1)
-        }, function (json) {
-            if (json != null) {
-                console.log("json", json);
-                $("input[name='id']").val(json.id);
-                $("input[name='name']").val(json.name);
-                $("input[name='email']").val(json.email);
-                $("input[name='username']").val(json.username);
-                $("input[name='password']").val(json.password);
+        var user = JSON.parse(sessionStorage.getItem('user'));
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader('Authorization', sessionStorage.getItem('token'));
+            },
+            type: "GET",
+            url: BASE_URL + "setting/users/find",
+            data: {id: user.id},
+            dataType: "json",
+            success: function (json) {
+                if (json != null) {
+                    console.log("json", json);
+                    $("input[name='id']").val(json.id);
+                    $("input[name='name']").val(json.name);
+                    $("input[name='email']").val(json.email);
+                    $("input[name='username']").val(json.username);
+                    $("input[name='password']").val(json.password);
+                }
             }
         });
+
     }
 
     function styleFocusInput() {
